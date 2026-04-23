@@ -1,0 +1,5 @@
+project:
+  type: default
+
+execute:
+  python: /home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/.venv/bin/python3
