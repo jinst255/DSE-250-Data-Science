@@ -1,7 +1,13 @@
 {
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash",
+      "args": ["-i"]
+    }
+  },
+  "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.env.linux": {
-    "QUARTO_PYTHON": "/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/.venv/bin/python3",
-    "PATH": "/home/justin/.pyenv/shims:/home/justin/.pyenv/bin:/home/justin/.local/bin:${env:PATH}"
+    "QUARTO_PYTHON": "/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/.venv/bin/python3"
   },
   "python.defaultInterpreterPath": "/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/.venv/bin/python3"
 }
