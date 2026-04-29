@@ -1,0 +1,170 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Client Report - Exploring Names\"\n",
+        "subtitle: \"Unit 1 Task 1\"\n",
+        "author: \"[STUDENT NAME]\"\n",
+        "format:\n",
+        "  html:\n",
+        "    self-contained: true\n",
+        "    page-layout: full\n",
+        "    title-block-banner: true\n",
+        "    toc: true\n",
+        "    toc-depth: 3\n",
+        "    toc-location: body\n",
+        "    number-sections: false\n",
+        "    html-math-method: katex\n",
+        "    code-fold: true\n",
+        "    code-summary: \"Show the code\"\n",
+        "    code-overflow: wrap\n",
+        "    code-copy: hover\n",
+        "    code-tools:\n",
+        "        source: false\n",
+        "        toggle: true\n",
+        "        caption: See code\n",
+        "execute: \n",
+        "  warning: false\n",
+        "    \n",
+        "---"
+      ],
+      "id": "a7adde34"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import polars as pl\n",
+        "import numpy as np\n",
+        "from lets_plot import *\n",
+        "\n",
+        "LetsPlot.setup_html(isolated_frame=True)"
+      ],
+      "id": "d7129a46",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html\n",
+        "\n",
+        "# Include and execute your code here\n",
+        "df = pl.read_csv(\"https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed69e7f1/names_year_csv.csv\")"
+      ],
+      "id": "2e8a909e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## QUESTION 1\n",
+        "\n",
+        "__What was the earliest year that the name ‘Felisha’ was used?__\n",
+        "\n",
+        "_type your results and analysis here_"
+      ],
+      "id": "e4184a31"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Q1\n"
+      ],
+      "id": "da248284",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## QUESTION 2\n",
+        "\n",
+        "__What year had the most babies named 'David'? How many babies were named 'David' that year?__\n",
+        "\n",
+        "_type your results and analysis here_"
+      ],
+      "id": "39b1c26a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Q2\n"
+      ],
+      "id": "209e412a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## QUESTION 3\n",
+        "\n",
+        "__What year did your name hit its peak? How many babies were named your name in that year?__\n",
+        "\n",
+        "_type your results and analysis here_"
+      ],
+      "id": "cd434a54"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Q3"
+      ],
+      "id": "2bdc83af",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## QUESTION 4\n",
+        "\n",
+        "__In the most recent year, what was the most common female name in Utah?__ \n",
+        "\n",
+        "_type your results and analysis here_"
+      ],
+      "id": "5ccf2501"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Q5\n"
+      ],
+      "id": "adfc2dad",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---"
+      ],
+      "id": "995d18c1"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/home/justin/.pyenv/versions/3.14.4/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
