@@ -1,7 +1,7 @@
 ---
 title: "Client Report - Exploring Names"
 subtitle: "Unit 1 Task 1"
-author: "[STUDENT NAME]"
+author: "Justin Hair"
 format:
   html:
     self-contained: true
@@ -37,18 +37,29 @@ LetsPlot.setup_html(isolated_frame=True)
 # Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
 
 # Include and execute your code here
-df = pl.read_csv("https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed69e7f1/names_year_csv.csv")
+# df = pl.read_csv("https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed69e7f1/names_year_csv.csv")
+
+# If I wanted to load this locally I could do this:
+df = pl.read_csv("names_year_csv.csv")
 ```
 
 ## QUESTION 1
 
 __What was the earliest year that the name ‘Felisha’ was used?__
 
-_type your results and analysis here_
+It was in 1964
 
 ```{python}
 # Q1
 
+# df.columns # I took a look at the data
+
+'''new_df = df.filter(pl.col("name") == "Felisha")
+answer = new_df.select(pl.col("year").min())
+display(answer)'''
+
+# One line version:
+print('The earliest year that "Felisha" name was used is: ' + str(df.filter(pl.col("name") == "Felisha").select(pl.col("year").min()).item()))
 
 ```
 
@@ -57,11 +68,28 @@ _type your results and analysis here_
 
 __What year had the most babies named 'David'? How many babies were named 'David' that year?__
 
-_type your results and analysis here_
+The year that had the most babies born with the name "David" was: 1955
+There were 86389 babies named "David" born in that year.
 
 ```{python}
 # Q2
 
+'''
+I need to:
+[x] only have rows where the name is David
+[x] then add together the # born in each year (Which is already done in the data set as total)
+[x] take the year with the most of them
+
+[x] print the year and the number.
+'''
+
+answerA = df.filter(pl.col("name") == "David").sort("Total", descending=True)["year"][0]
+
+answerB = df.filter(pl.col("name") == "David", "year").select("Total").max().item()
+
+
+print(f'The year that had the most babies born with the name "David" was: {answerA}')
+print(f'There were {answerB} babies named "David" born in that year.')
 
 ```
 
@@ -70,10 +98,17 @@ _type your results and analysis here_
 
 __What year did your name hit its peak? How many babies were named your name in that year?__
 
-_type your results and analysis here_
+My name (Justin) hit its peak in 1988
+In that year there were 35243 babies born with my name.
 
 ```{python}
 # Q3
+
+answerA = df.filter(pl.col("name") == "Justin").sort("Total", descending=True)["year"][0]
+
+answerB = df.filter(pl.col("name") == "Justin", "year").select("Total").max().item()
+
+print(f'My name (Justin) hit its peak in {answerA}\nIn that year there were {answerB} babies born with my name.')
 
 ```
 
@@ -82,11 +117,44 @@ _type your results and analysis here_
 
 __In the most recent year, what was the most common female name in Utah?__ 
 
-_type your results and analysis here_
+In the dataset, the most recent year is 2015, and in that year, the most common name is Emma which was given to 281 number of female babies. 
 
 ```{python}
 # Q5
+'''
 
+- Get a dataframe with 'name', 'year', female/male, 'count', 'UT'
+
+[x] Locate data 
+[x] Clean data if needed
+[x] Load new data frame
+[x] Remove any row when 'Sex' is 'M'
+[x] Remove any row when 'StateCode' is not 'UT'
+[x] Find the .max of 'YearOfBirth'
+[x] Sort by highest 'Number' (name count)
+[x] display the results
+'''
+
+# Load new data frame
+df_new = pl.read_csv("babyNamesUS.csv")
+
+# Remove any row when 'Sex' is 'M'
+df_new = df_new.filter(pl.col('Sex') == 'F')
+
+# Remove any row when 'StateCode' is not 'UT'
+df_new = df_new.filter(pl.col('StateCode') == 'UT') 
+
+# Find the .max of 'YearOfBirth'
+# Find what year it is
+max_year = df_new.select(pl.col("YearOfBirth").max()).item()
+# Exculde all other entries
+df_new = df_new.filter(pl.col("YearOfBirth") == max_year)
+
+# Sort by highest 'Number' (name count)
+df_new = df_new.sort('Number', descending=True)
+
+# Print it all out!
+print(f'In the dataset, the most recent year is {max_year}, and in that year, the most common name is {df_new.head(1)['Name'].item()} which was given to {df_new.head(1)["Number"].item()} number of female babies.')
 
 ```
 
