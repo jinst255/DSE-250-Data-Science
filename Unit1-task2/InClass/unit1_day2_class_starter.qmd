@@ -1,0 +1,69 @@
+---
+title: "ggplotting"
+format: html
+---
+
+Load libraries and load in data
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+LetsPlot.setup_html(isolated_frame=True)
+
+
+url = "https://byui-cse.github.io/cse110-course/lesson11/life-expectancy.csv"
+df = pl.read_csv(url)
+
+df
+```
+
+REVIEW EXERCISE:
+Just look at the United States, rename the last column to "Life".
+
+```{python}
+usa = df.filter(pl.col('Code') == 'USA').rename({"Life expectancy (years)": "Life"})
+
+usa
+```
+
+## Visualizations
+
+```{python}
+(
+    ggplot(data=usa) 
+    + geom_histogram(mapping=aes(x='Life'))
+)
+```
+
+```{python}
+(
+    ggplot(data=usa) 
+    + geom_line(mapping=aes(x='Year', y='Life'))
+)
+```
+
+```{python}
+(
+    ggplot(data=usa) 
+    + geom_line(mapping=aes(x='Year', y='Life'))
+    # + scale_x_continuous(limits=[1900, 2000])
+    # + scale_y_continuous(limits=[40,80])
+    + coord_cartesian(xlim=[1900,2000])
+)
+
+```
+
+```{python}
+(
+    ggplot(data=usa)
+    + geom_area(mapping=aes(x='Year', y='Life'))
+    + scale_x_continuous(limits=[1900, 2000])
+    + geom_rect(xmin=1915, xmax=1920, ymin=45, ymax=56, fill='red', alpha=.25)
+    + geom_segment(x=1925, xend=1920, y=46, yend=47, arrow=arrow())
+    + geom_text(x=1926, y=46, label='Spanish Flu', hjust=0)
+    + geom_vline(xintercept=1943, color='red', linetype='dashed')
+    + labs(title='United States', y='Life Expectancy (years)', x='Year')
+)
+
+```
