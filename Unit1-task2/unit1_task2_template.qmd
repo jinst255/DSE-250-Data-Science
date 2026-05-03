@@ -46,12 +46,37 @@ df = pl.read_csv("https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed6
 
 __How does your name at your birth year compare to its use historically? Your must provide a chart. The years labels on your charts should not include a comma.__ 
 
-_type your results and analysis here_
+I found that in 1910, my name was only given to 5 babies. In 2005, it was given to 10,517 babies. The name hit its peak in 1989 when it was given to 33,002 babies.
 
 ```{python}
 # Q1
+'''
+extract my names data from 2005 and every year before.
+- filter the data to just my name
+- cut out the years from 2006 and on
 
+Display in a grid
+Fine tune labels and make it look cool
+'''
 
+# Only keep my name and years before 2006
+question1 = df.filter(pl.col("name") == "Justin").filter(pl.col("year") < 2006)
+
+question1
+
+(
+  ggplot(data=question1)
+  + geom_line(mapping=aes(x='year', y='Total'), color='blue')
+  + ggtitle('Usage of the name "Justin" over time in the USA', subtitle="1910 - 2005")
+  + scale_x_continuous(format=".0f")
+  + coord_cartesian(xlim=[1910, 2005])
+  + theme(
+    axis_line=element_line(size=2),
+    panel_background=element_rect(color="black", fill="#eeeeee", size=1),
+    plot_title=element_text(hjust=0.5, face="bold"),
+    plot_subtitle=element_text(hjust=0.5)
+  )
+)
 ```
 
 
@@ -64,7 +89,7 @@ _type your results and analysis here_
 ```{python}
 # Q2
 
-
+df
 ```
 
 ## QUESTION 3
