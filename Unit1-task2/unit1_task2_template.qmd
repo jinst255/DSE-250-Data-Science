@@ -46,7 +46,7 @@ df = pl.read_csv("https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed6
 
 __How does your name at your birth year compare to its use historically? Your must provide a chart. The years labels on your charts should not include a comma.__ 
 
-I found that in 1910, my name was only given to 5 babies. In 2005, it was given to 10,517 babies. The name hit its peak in 1989 when it was given to 33,002 babies.
+The year I was born, I was born along side of 10,516 other babies named Justin. I found that in 1910, my name was very rare and only given to 5 babies. The name hit its peak in 1989 when it was given to 33,002 babies.
 
 ```{python}
 # Q1
@@ -80,27 +80,93 @@ question1
 ```
 
 
+This is random but, look at this fancy chart of all the names in the dataset! Turns out that "Linda" hold the record for most babies given a name in a single year! Its like 100,000!
+
+```{python}
+
+(
+  ggplot(data=df, mapping=aes(x='year', y='Total', color='name'))
+  + geom_line()
+  + scale_x_continuous(format=".0f")
+  + theme(
+    axis_line=element_line(size=2),
+    panel_background=element_rect(color="black", fill="#eeeeee", size=1),
+    plot_title=element_text(hjust=0.5, face="bold"),
+    plot_subtitle=element_text(hjust=0.5),
+    legend_position="none"
+  )
+)
+```
+
 ## QUESTION 2
 
 __Think of a unique name from a famous movie. Plot the usage of that name and see how changes line up with the movie release. Does it look like the movie had an effect on usage?__  
 
-_type your results and analysis here_
+I choose Dorothy from the Wizard of Oz that came out in 1939. Bassed of the data, I dont believe the movie had an impact on the usage of the name. Instead I would believe that the name, being a random popular one was chosen for the role. 
+
 
 ```{python}
 # Q2
+'''
+I'll use Dorothy from the wizard of oz that came out in 1939
 
-df
+I want to label 1939 with a nice little marker
+'''
+name = "Dorothy"
+
+question2 = df.filter(pl.col("name") == name)
+
+(
+  ggplot(data=question2)
+  + geom_line(mapping=aes(x='year', y='Total'), color='blue')
+  + geom_segment(x=1945, y=19000, xend=1939, yend=15196, color='red', size=0.6, arrow=arrow())
+  + geom_label(x=1945, y=19000, label="Wizard of Oz (1939)", fill='white', color='black', size=6, hjust="left")
+  + ggtitle(f'Usage of the name "{name}" over time in the USA', subtitle="1920 - 1980")
+  + scale_x_continuous(format=".0f")
+  + coord_cartesian(xlim=[1920, 1980])
+
+  + theme(
+    axis_line=element_line(size=2),
+    panel_background=element_rect(color="black", fill="#eeeeee", size=1),
+    plot_title=element_text(hjust=0.5, face="bold"),
+    plot_subtitle=element_text(hjust=0.5)
+  )
+)
+
+
 ```
 
 ## QUESTION 3
 
 __Mary, Martha, Peter, and Paul are all Christian names. From 1920 - 2000, compare the name usage of each of the four names in a single chart. What trends do you notice?__  
 
-_type your results and analysis here_
+Christian names are on the decline. The all time high for any given name during the given time frame was "mary" in 1921 and in that year there were 74,134 babies given that name. In 2000, it was only given to 6,221 babies. 
 
 ```{python}
 # Q3
+'''
+Remove all names but the 4 from the data.
 
+I'll use different colors for each of the 4 names.
+'''
+
+names = ["Mary", "Martha", "Peter", "Paul"]
+question3 = df.filter(pl.col("name").is_in(names))
+
+question3
+
+(
+  ggplot(data=question3, mapping=aes(x='year', y='Total', color='name'))
+  + geom_line()
+  + scale_x_continuous(format=".0f")
+  + coord_cartesian(xlim=[1920, 2000])
+  + ggtitle('Usage of Christian Names in the USA')
+  
+  + theme(
+    plot_title=element_text(hjust=0.5, face="bold"),
+    panel_background=element_rect(color="black", fill="#eeeeee", size=1)
+  )
+)
 
 ```
 <!-- Make sure at least one of your charts includes reference marks!! -->
