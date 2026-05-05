@@ -1,0 +1,91 @@
+
+---
+title: "Untitled"
+format: html
+---
+
+Load libraries and load in data
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+Who is the biggest pop star data. One way to measure this is by how many social media followers someone has. That data was collected in 2018 for 20 popular and recognizable artists.
+
+```{python}
+followers = pl.read_csv("https://byuidatascience.github.io/DS250-Course-Polars/Data/social_media_followers.csv")
+```
+
+
+```{python}
+# bad example
+# followers['instagram'] = followers['isntagram'] / 1000000
+
+# good example
+followers_temp = followers.with_columns(pl.col('instagram') / 1000000)
+
+followers_temp
+
+
+```
+
+
+```{python}
+followers_mils = followers.with_columns(insta_mils = pl.col('instagram') / 1000000)
+
+followers_mils = followers.with_columns((pl.col('instagram') / 1000000).alias('insta_mils'))
+
+followers_mils 
+```
+
+```{python}
+followers.with_columns(
+    (pl.col('instagram') / 1000000).alias('insta_mils'),
+    (pl.col('youtube') / 1000000).alias('youtube_mils'),
+    (pl.col('twitter') / 1000000).alias('twitter_mils'),
+    (pl.col('facebook') / 1000000).alias('facebook_mils')
+).with_columns(
+    total_followers = (
+        pl.col('insta_mils') + pl.col('youtube_mils') + pl.col('twitter_mils') + pl.col('facebook_mils')
+    ).round(2)
+).with_columns(
+    insta_percentage = pl.col('insta_mils') / pl.col('total_followers'),
+    youtube_percentage = pl.col('youtube_mils') / pl.col('total_followers'),
+    twitter_percentage = pl.col('twitter_mils') / pl.col('total_followers'),
+    facebook_percentage = pl.col('facebook_mils') / pl.col('total_followers')
+)
+
+```
+
+```{python}
+df = followers.with_columns(
+    pl.col(['instagram', 'youtube', 'twitter', 'facebook']) / 1000000
+).with_columns(
+    total_followers = pl.sum_horizontal(['instagram', 'youtube', 'twitter', 'facebook'])
+).with_columns(
+    (pl.col(['instagram', 'youtube', 'twitter', 'facebook']) / pl.col('total_followers')).name.suffix('_perc')
+).with_columns(
+    pl.sum_horizontal(['instagram_perc', 'youtube_perc', 'twitter_perc', 'facebook_perc']).alias('sum_perc')
+)
+
+
+df
+```
+
+```{python}
+(
+    ggplot(df.sort('instagram'), mapping=aes(y='id', x='instagram')) 
+    + geom_bar(stat='identity')
+    + labs(x='Instagram Followers (millions)',
+    title='Arianna & Selena Dominate Instagram')
+
+    + theme(
+        axis_title=element_blank()
+    )
+)
+```
+
