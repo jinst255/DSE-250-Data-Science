@@ -1,0 +1,180 @@
+---
+title: "Client Report - Famous Names"
+subtitle: "Unit 1 Task 3"
+author: "Justin Hair"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+import polars.selectors as cs
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
+
+# Include and execute your code here
+df = pl.read_csv("https://posit.byui.edu/content/0d43d66f-d3b7-4c43-8c36-52e3ed69e7f1/names_year_csv.csv")
+```
+
+```{python}
+# I'm making the data types smaller to save memory and speed up processing.
+
+df = df.with_columns(pl.col("year").cast(pl.Int16))
+
+df = df.with_columns(
+    cs.matches(r"^[A-Z]{2}$").cast(pl.Int32)
+)
+
+```
+
+## QUESTION 1
+
+<!-- Make sure at least one of your charts includes reference marks!! --> 
+
+__Make a new column that represents the total number of babies with your name for only those states in which you have lived. (If you have only ever lived in one state, pick at least one other state so you get practice summing across columns). Make a graph displaying that total for your name over time.__
+
+I have lived in Utah and Idaho. When I was born there were 146 other babies name Justin born in these 2 states.
+
+
+```{python}
+# Q1
+Q1_df = df.filter(pl.col("name") == "Justin")
+
+Q1_df = Q1_df.with_columns(
+  (pl.col("UT") + pl.col("ID")).alias("ID_UT_total")
+)
+
+
+(
+  ggplot(Q1_df, aes(x="year", y="ID_UT_total"))
+  + geom_line()
+  + geom_label(x=2010, y=300, label="My birth year", hjust=0.5, vjust='bottom')
+  + geom_segment(x=2010, y=300, xend=2005, yend=147, arrow=arrow())
+
+  + labs(
+    title="Babies Named Justin in Utah and Idaho",
+    x="Year",
+    y="Total Babies"
+  )
+  + scale_x_continuous(format="d")
+
+  + theme(
+    title=element_text(size=14, hjust=0.5),
+  )
+)
+
+```
+
+
+## QUESTION 2
+
+1. __Let's look at a name that is special for members of the church: Brigham. For each year, calculate what proportion of babies named Brigham were born in Idaho and Utah? Make a graph displaying the proportion over time.__  
+
+I would have expected more babies to be named Brigham in the 1900's but I was suprised to see so few. Its interesting that 100% of the babies named Brigham were born in UT and ID from 1971-1987. 
+
+```{python}
+# Q2
+'''
+- filter names only to Brigham (remove rows)
+- create a new column that add ID and UT together
+- create a new column that divides ID&UT by 'total' 
+- graph the new column x='year' y='portionOfBrighams-ID&UT'
+'''
+
+
+# filter names only to Brigham (remove rows)
+Q2_df = df.filter(pl.col("name") == "Brigham")
+
+# create a new column that add ID and UT together
+Q2_df = Q2_df.with_columns(
+  (pl.col("UT") + pl.col("ID")).alias("ID&UT_total")
+)
+
+# create a new column that divides ID&UT by 'total' 
+Q2_df = Q2_df.with_columns(
+  (pl.col("ID&UT_total") / pl.col("Total")
+  ).alias("portionOfBrighams-ID&UT"))
+
+
+# graph the new column x='year' y='portionOfBrighams-ID&UT'
+(
+  ggplot(Q2_df, aes(x="year", y="portionOfBrighams-ID&UT"))
+  + geom_line()
+
+  + labs(
+    title="Percentage of Babies Named Brigham in Utah and Idaho",
+    x="Year",
+    y="Percentage of Brighams in ID & UT"
+  )
+  + scale_x_continuous(format="d")
+  + scale_y_continuous()
+
+  + theme(
+    title=element_text(size=14, hjust=0.5),
+  )
+)
+
+```
+
+<!-- Make sure at least one of your charts includes reference marks!! -->
+
+## QUESTION 3
+
+1. __Consider doing some data validation. For the name David, calculate a sum of all 50 states and District of Columbia for each year. Now compare that total to the value in the 'Total' column. In which years, if any, do they not agree?__
+
+According the graph they are the same. 
+
+```{python}
+# Q3
+'''
+- filter out just the name David
+- add up all data in each state and make it a new column
+- graph total
+- graph new_total
+'''
+
+
+# filter out just the name David
+Q3_df = df.filter(pl.col("name") == "David") 
+
+# add up all data in each state and make it a new column
+Q3_df = Q3_df.with_columns(
+    pl.sum_horizontal(cs.matches(r"^[A-Z]{2}$")).alias("New_total")
+) 
+
+
+
+# graph total against new_total
+(
+    ggplot(Q3_df, aes(x="year"))
+    + geom_line(aes(y="Total"), color="blue")
+    + geom_line(aes(y="New_total"), color="red", size=0.4)
+    + scale_x_continuous(format="d")
+)
+```
+

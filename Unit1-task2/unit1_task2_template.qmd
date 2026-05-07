@@ -112,7 +112,8 @@ I'll use Dorothy from the wizard of oz that came out in 1939
 
 I want to label 1939 with a nice little marker
 '''
-name = "Dorothy"
+name = "Justin"
+print(df)
 
 question2 = df.filter(pl.col("name") == name)
 
@@ -123,7 +124,7 @@ question2 = df.filter(pl.col("name") == name)
   + geom_label(x=1945, y=19000, label="Wizard of Oz (1939)", fill='white', color='black', size=6, hjust="left")
   + ggtitle(f'Usage of the name "{name}" over time in the USA', subtitle="1920 - 1980")
   + scale_x_continuous(format="d")
-  + coord_cartesian(xlim=[1920, 1980])
+  + coord_cartesian(xlim=[1910, 2020])
 
   + theme(
     axis_line=element_line(size=2),
