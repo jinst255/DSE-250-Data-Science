@@ -1,0 +1,138 @@
+---
+title: "Unit 2 Task 2 in class"
+format: html
+execute:
+    echo: false
+
+
+---
+
+
+
+```{python}
+import polars as pl
+import requests #new for reading in JSON
+import io       #new for reading in JSON
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+
+# I obtained this data from: https://www.agentsfordata.com/json/sample
+
+url = "https://byuidatascience.github.io/DS250-Course-Polars/Data/house-price.json"
+
+# Use the requests library to send an HTTP GET request to that URL.
+# The result (response) contains the server’s reply, including the file contents.
+# The actual bytes of the file are in response.content.
+response = requests.get(url)
+
+# response.content is raw bytes, not a file.
+# io.BytesIO(...) wraps those bytes in a file-like object in memory, which Polars can read from.
+# pl.read_json(...) parses the JSON and loads it into a Polars DataFrame called df.
+houses = pl.read_json(io.BytesIO(response.content))
+```
+
+```{python}
+prophets = [76, 78, 91, 87, 80, 88, 81, 96, 95, 74, 90, 94, 87, 97, 90, 101]
+pl.Series(prophets).mean()
+```
+
+```{python}
+prices = houses.select('price').to_series()
+prices.mean() # this gives a scaler. (Which is just 1 number, its not a list, matrix, or tensor)
+```
+
+
+```{python}
+houses.select(pl.col('price').median().alias('average_price'))
+houses.select(pl.col('price').min().alias('min_price'))
+houses.select(pl.col('price').max().alias('max_price'))
+
+display(houses.sample(5))
+```
+
+```{python}
+# caculate the average price of bedrooms
+houses.group_by('bedrooms').agg(pl.col('price').mean())
+```
+
+```{python}
+houses.group_by('bedrooms').agg(
+    pl.mean('area'),
+    pl.max('stories'),
+    pl.min('price').alias('min_price'),
+    pl.max('price').alias('max_price'),
+    pl.len().alias('row_count')
+)
+```
+
+```{python}
+houses.select(pl.len()).to_series().item()
+```
+
+```{python}
+houses.group_by('bedrooms').agg()
+```
+
+```{python}
+houses.group_by('bedrooms').agg(
+    pl.col(pl.Int64).mean().name.suffix('_mean')
+)
+```
+
+
+
+```{python}
+(
+    houses.group_by('bedrooms')
+        .agg(
+            pl.col(pl.Int64).mean().name.suffix('_mean'), 
+            pl.col(pl.Int64).std().name.suffix('_stdev'),
+            pl.len()
+        ).with_columns(
+            std_error = pl.col('price_mean') / pl.col('len')
+        )
+)
+```
+
+
+```{python}
+(
+    houses.group_by('bedrooms').agg(
+        pl.col('guestroom'), pl.len()
+    )
+)
+```
+
+
+```{python}
+(
+    houses.group_by('bedrooms').agg(
+        pl.col('guestroom'),
+        (pl.col('guestroom') == 'yes').sum().alias('count_with_guestroom'),
+        (pl.col('guestroom') == 'yes').mean().alias('count_without_guestroom')
+    )
+)
+```
+
+
+```{python}
+(
+    houses.group_by('bedrooms', 'bathrooms')
+    .agg(
+        pl.col('price').median(),
+        pl.col('area').median()
+    ).sort('bedrooms', 'bathrooms')
+).head(5)
+```
+
+
+```{python}
+houses.with_columns(
+    pl.col('price').median().over('bedrooms').alias('median_price_by_bedroom')
+)
+```

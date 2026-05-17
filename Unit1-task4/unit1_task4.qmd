@@ -62,7 +62,8 @@ display(df)
         axis_ticks_length_x=0,
         plot_title=element_text(face="italic", size=24),
         panel_grid_minor=element_blank(),
-        legend_position="right"
+        legend_position="right",
+        legend_justification="top"
     )
 )
 

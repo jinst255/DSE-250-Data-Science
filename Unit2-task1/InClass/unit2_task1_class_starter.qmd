@@ -1,0 +1,86 @@
+---
+title: "Unit 2 Task 1 Lesson"
+format: html
+---
+
+```{python}
+import polars as pl
+import requests #new for reading in JSON
+import io       #new for reading in JSON
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+
+url = "https://byuidatascience.github.io/DS250-Course-Polars/Data/house-price.json"
+
+# Use the requests library to send an HTTP GET request to that URL.
+# The result (response) contains the server’s reply, including the file contents.
+# The actual bytes of the file are in response.content.
+response = requests.get(url)
+
+# response.content is raw bytes, not a file.
+# io.BytesIO(...) wraps those bytes in a file-like object in memory, which Polars can read from.
+# pl.read_json(...) parses the JSON and loads it into a Polars DataFrame called df.
+houses = pl.read_json(io.BytesIO(response.content))
+```
+
+
+```{python}
+
+display(houses.head())
+
+# update price when a house is done (5000 * sqft / 1000)
+# is its partly done: (2500 * sqft / 1000)
+adjusted = houses.with_columns(
+    adj_price =   pl.when(pl.col('furnishingstatus') == 'furnished')
+                    .then(pl.col('price') + (5000 * pl.col('area') / 1000))
+                    .when(pl.col('furnishingstatus') == 'semi-furnished')
+                    .then(pl.col('price') + (2500 * pl.col('area') / 1000))
+                    .otherwise(pl.col('price'))
+) 
+
+display(adjusted.head())
+
+```
+
+```{python}
+# convert price to 1000s
+(
+    adjusted.select(pl.col(pl.Float64, pl.Int64))
+    .with_columns(
+        ((pl.col(['price', 'adj_price']) / 1000).round(0).cast(pl.Int64)).name.suffix('_k')
+    )
+)
+```
+
+```{python}
+adjusted.with_columns(
+    ((pl.col('^.*price.*$') / 1000).round(0).cast(pl.Int64)).name.suffix('_k')
+)
+```
+
+```{python}
+import polars.selectors as cs
+
+adjusted.with_columns(((cs.numeric() / 1000).round(0).cast(pl.Int64)).name.suffix('_k'))
+```
+
+```{python}
+df_dumb = adjusted.with_columns(pl.col('bedrooms').cast(pl.Int8))
+
+df_dumb 
+```
+
+
+```{python}
+
+display(df_dumb.head())
+(
+    ggplot(df_dumb, aes(x='bedrooms', y='area'))
+    + geom_violin()
+)
+```
