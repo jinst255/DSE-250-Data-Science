@@ -104,10 +104,10 @@ It turns out that SLC has the has the lowest proportion of delayed flights comin
 ```{python}
 
 (
-  ggplot(data=Q2, mapping=aes(x="airport_code", y="proportion_delayed"))
+  ggplot(data=Q2, mapping=aes(x="airport_code", y="proportion_delayed", fill="airport_code"))
   + geom_bar(stat="identity")
   + coord_flip()
-  + labs(x="Airport", y="Proportion of delayed flights")
+  + labs(x="Airport", y="Proportion of delayed flights", fill="Airport Code")
 )
 
 ```

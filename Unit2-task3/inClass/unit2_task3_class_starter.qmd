@@ -1,0 +1,110 @@
+---
+title: "Unit 2 task 3"
+format: html
+---
+
+
+```{python}
+import polars as pl
+import requests
+import io
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+```{python}
+df = pl.DataFrame({
+    "A": ["X", "B", "C", "X", None],
+    "B": [1, 2, 3, 1, -999],
+    "C": ["apple", "banana", "cherry", "apple", "n/a"]
+})
+
+```
+
+# Filling in missing values
+```{python}
+display(df)
+
+df.with_columns(
+    fixed_data = pl.col("A").fill_null("missing")
+)
+```
+
+```{python}
+df.with_columns(
+    pl.when(pl.col('B') < 0).then(None).otherwise(pl.col('B')).alias('B_new')
+    )
+```
+
+```{python}
+df.with_columns(
+    pl.col("C").str.replace_all("a", "x").alias("C")
+)
+```
+
+# Replacing values in a column
+```{python}
+df.with_columns(
+    pl.col('A').str.replace_all('X', '10').alias('A'),
+)
+```
+
+# Replacing values in >1 column
+```{python}
+mapper1 = {'X': '10', 'B': '20'}
+
+df.with_columns(
+    pl.col('A').replace(mapper1).alias('A')
+)
+```
+
+
+```{python}
+df = pl.DataFrame({
+     "a": [1, 2, None, 3]
+    ,"b": [1.0, 2, float("nan"), None]
+    ,"c": [-999, 5, None, 11]
+})
+df
+```
+
+```{python}
+df.with_columns(
+    pl.col('a').fill_null(0)
+)
+```
+
+```{python}
+df.with_columns(
+    pl.col('c').replace(-999, None)
+)
+```
+
+
+# We'll use this in the homework
+```{python}
+import json
+
+whole_thing = df.to_dicts()
+
+print(json.dumps(whole_thing, indent=3))
+
+print('Print one row:')
+one_row = df[0].to_dicts()
+print(json.dumps(one_row, indent=2))
+
+# differnt way to output json
+df.write_json()
+print(df.write_ndjson())
+```
+
+# Summary
+- replace (replace, replace_all, replace_strict)
+- fill_null()
+- fill_nan()
+- when().then()...
+- workflow... chain stuff together
+- convert bad calues to null, then fill_null (You wouldnt want to use like -999 in the mean calculation to fill in the value)
