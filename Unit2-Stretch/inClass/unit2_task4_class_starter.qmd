@@ -1,0 +1,64 @@
+---
+title: "Unit 2 Task 4"
+format: html
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+
+df = pl.read_csv('https://byuistats.github.io/M335/data/rcw_reshape.csv')
+display(df)
+```
+
+
+# replace null with 0
+```{python}
+df_wide = df.pivot(on="Department", values="Count")
+df_wide = df_wide.with_columns(
+    pl.col(pl.NUMERIC_DTYPES).fill_null(0)
+)
+display(df_wide)
+```
+
+# if you dont want to see alllll of the columns, use index=[...]
+```{python}
+df_long = df_wide.unpivot(
+    on=['Chem', 'CSEE', 'DCM', 'GEO', 'Math', 'ME', 'PHY'], 
+    variable_name="Department", 
+    value_name="Count",
+    index=["Year", "Semester", "Semester_Date"]
+)
+display(df_long)
+```
+
+
+```{python}
+(
+    ggplot(data=df_long, mapping=aes(x="Semester_Date", y="Count", color="Department"))
+    + geom_line()
+)
+```
+
+```{python}
+print(f"original df: {df.shape}")
+print(f"wide df: {df_wide.shape}")
+print(f"long df: {df_long.shape}")
+```
+
+
+```{python}
+(
+    ggplot(data=df_long, mapping=aes(x="Semester_Date", y="Count", color="Department"))
+    + geom_line()
+    + facet_wrap("Department")
+
+    + labs(
+        x = "", 
+        y = ""
+    )
+)
+```

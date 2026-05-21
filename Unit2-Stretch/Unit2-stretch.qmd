@@ -1,0 +1,62 @@
+---
+title: "Unit 2 Stretch"
+format: html
+
+---
+
+
+```{python}
+import polars as pl
+from lets_plot import *
+import requests
+import io
+import polars.selectors as cs
+
+LetsPlot.setup_html(isolated_frame=True)
+
+# pull json data from https://github.com/byuidatascience/data4missing/raw/master/data-raw/flights_missing/flights_missing.json
+response = requests.get("https://github.com/byuidatascience/data4missing/raw/master/data-raw/flights_missing/flights_missing.json")
+df = pl.read_json(io.BytesIO(response.content))
+
+```
+
+```{python}
+# Use cleaned data from Task 3 (I used AI to summerize it to save time copying and pasting)
+# Minimal cleaning: normalize obvious errors, set impossible values to null
+nullified_df = df.with_columns(
+    pl.when(pl.col("airport_name").str.len_chars() >= 4)
+    .then(pl.col("airport_name"))
+    .otherwise(None)
+    .alias("airport_name"),
+
+    pl.when(pl.col("month").is_in([
+        "January","February","Febuary","March","April","May","June",
+        "July","August","September","October","November","December"
+    ]))
+    .then(pl.col("month"))
+    .otherwise(None)
+    .alias("month"),
+
+    pl.when(pl.col("num_of_delays_carrier") == "1500+")
+    .then(None)
+    .otherwise(pl.col("num_of_delays_carrier"))
+    .alias("num_of_delays_carrier"),
+).with_columns(
+    pl.col("num_of_delays_carrier").cast(pl.Int64)
+)
+
+int_cols = nullified_df.select(cs.by_dtype(pl.Int64)).columns
+nullified_df = nullified_df.with_columns(
+    [pl.when(pl.col(c) < 0).then(None).otherwise(pl.col(c)).alias(c) for c in int_cols]
+)
+
+cleaned_df = nullified_df.with_columns(
+    cs.starts_with("num_of_").fill_null(cs.starts_with("num_of_").mean()),
+    cs.starts_with("minutes_").fill_null(cs.starts_with("minutes_").median())
+)
+```
+
+
+```{python}
+display(cleaned_df)
+```
