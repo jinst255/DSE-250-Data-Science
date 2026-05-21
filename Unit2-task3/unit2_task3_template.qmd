@@ -138,15 +138,6 @@ nullified_df = nullified_df.with_columns(
      ]
  )
 
-# One example record from the cleaned data in raw JSON format (includes nulls)
-example_json = (
-  nullified_df
-  .filter(pl.any_horizontal(pl.all().is_null()))
-  .head(1)
-  .to_dicts()
-)
-example_json
-
 ```
 
 ## QUESTION 2
@@ -170,14 +161,15 @@ all 5 of those, get the median value and fill it in.
 
 cleaned_df = nullified_df
 
-# Fill missing values: minutes_* -> median, num_of_* -> mean
+# Calculate medians for all 5 ints.
+pl.col("minutes_delayed_carrier").fill_null(pl.col("minutes_delayed_carrier").median())
 
 cleaned_df = cleaned_df.with_columns(
   pl.col("year").fill_null(pl.col("year").median())
 )
 
 cleaned_df = cleaned_df.with_columns(
-  cs.starts_with("num_of_").fill_null(cs.starts_with("num_of_").mean())
+  cs.starts_with("num_of_").fill_null(cs.starts_with("num_of_").median())
 )
 
 cleaned_df = cleaned_df.with_columns(
