@@ -1,7 +1,7 @@
 ---
 title: "Client Report - Missing values"
 subtitle: "Unit 2 Task 3"
-author: "[STUDENT NAME]"
+author: "Justin Hair"
 format:
   html:
     self-contained: true
@@ -31,6 +31,7 @@ import requests #new for reading in JSON
 import io       #new for reading in JSON
 import numpy as np
 from lets_plot import *
+import polars.selectors as cs
 
 LetsPlot.setup_html(isolated_frame=True)
 ```
@@ -46,11 +47,105 @@ df = pl.read_json(io.BytesIO(response.content))
 
 1. __Convert values to missing__ Start with a fresh copy of the flights dataset by reading it in from the link provided above (as opposed to starting with the dataset you ended with in the last assignment). Identify data values that are problematic, non-sense or impossible and change them to be missing. In your report include one record example (one row) from your clean data, in the raw JSON format. Your example should display at least one missing value so that we can verify it was done correctly. (Note: JSON will convert NaN's to null). Describe your process for finding values that needed to be changed, and how you changed them.
 
-_Describe your results and analysis here_
+One example of a error in the data is in the minutes_delayed_nas column. There is at least 1 row where the value is a negative number. It is imposible to have negative minutes. 
+It was easy to identify what I do know is an error. But its possible and even likely that there are more errors.
+I tested a couple things to find some errors
+
+
 
 ```{python}
-# Include and execute your code here
+'''
+Experiments to run to validate data:
+- filter for any string that doesnt have 3 chars in "airport_code"
+- how many strings contain non numberical chars in "num_of_delays_carrier"? (To catch "+")
 
+
+What values are weird?
+- empty string in "airport_name" column
+- any value in "month" that is not a real month)
+- negative #'s in any numeric columns. (After cleaning "num_of_delays_carrier" and casting it to an int)
+
+
+TODO list: (Print results, verify, remove)
+- fix airport_code (!= 3 chars)
+- fix airport_name (<4 chars)
+- fix month (!= .isin(Jan-Dec))
+- if "num_of_delays_carrier" contains non numerical chars, convert to null
+- Cast num_of_delays_carrier to i64
+- Check all i64 columns for negativ values, convert to null
+'''
+# df.sample(10)
+
+nullified_df = df
+
+# fix airport_code (!= 3 chars)
+errors = df.filter(pl.col("airport_code").str.len_chars() != 3)
+# print(errors) # There are 0 errors in "airport_code"
+
+# fix airport_name (<4 chars)
+errors = df.filter(pl.col("airport_name").str.len_chars() < 4)
+# print(errors["airport_name"].unique()) # This prints out every unique value. In this case there are 56 instances of empty strings. 
+
+nullified_df = nullified_df.with_columns(
+    pl.when(pl.col("airport_name").str.len_chars() >= 4)
+    .then(pl.col("airport_name"))
+    .otherwise(None)
+    .alias("airport_name")
+)
+
+
+# fix month (!= .isin(Jan-Dec))
+months = ["January", "February", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+errors = df.filter(~pl.col("month").is_in(months))
+# print(errors["month"].unique()) # Its just the misspelling of "February" and also "n/a"
+# print(len(errors)) # 27 errors. (its "n/a")
+
+nullified_df = nullified_df.with_columns(
+    pl.when(pl.col("month").is_in(months))
+    .then(pl.col("month"))
+    .otherwise(None)
+    .alias("month")
+)
+
+# if "num_of_delays_carrier" contains non numerical chars, convert to null
+errors = df.filter(pl.col("num_of_delays_carrier").str.contains(r"[^0-9]"))
+# print(errors["num_of_delays_carrier"].unique())
+# print(len(errors)) # 73 instances of "1500+"
+
+nullified_df = nullified_df.with_columns(
+  pl.when(pl.col("num_of_delays_carrier") == "1500+")
+  .then(None)
+  .otherwise(pl.col("num_of_delays_carrier"))
+  .alias("num_of_delays_carrier")
+)
+
+
+# Cast num_of_delays_carrier to i64
+nullified_df = nullified_df.with_columns(
+    pl.col("num_of_delays_carrier").cast(pl.Int64)
+)
+
+# Check all i64 columns for negative values, convert to null
+columns_that_are_ints = nullified_df.select(cs.by_dtype(pl.Int64)).columns
+
+nullified_df = nullified_df.with_columns(
+     [
+         pl.when(pl.col(col) < 0)
+         .then(None)
+         .otherwise(pl.col(col))
+         .alias(col)
+         for col in columns_that_are_ints
+     ]
+ )
+
+# One example record from the cleaned data in raw JSON format (includes nulls)
+example_json = (
+  nullified_df
+  .filter(pl.any_horizontal(pl.all().is_null()))
+  .head(1)
+  .to_dicts()
+)
+example_json
 
 ```
 
@@ -61,7 +156,35 @@ _Describe your results and analysis here_
 _Nothing to write/report for this question_
 
 ```{python}
-# Include and execute your code here
+"""
+Overwrite data for the following columns:
+- airport_name  # Not asked for
+- month # Not asked for
+- year
+- num_of_delays_carrier
+- minutes_delayed_carrier
+- minutes_delayed_nas
+
+all 5 of those, get the median value and fill it in. 
+"""
+
+cleaned_df = nullified_df
+
+# Fill missing values: minutes_* -> median, num_of_* -> mean
+
+cleaned_df = cleaned_df.with_columns(
+  pl.col("year").fill_null(pl.col("year").median())
+)
+
+cleaned_df = cleaned_df.with_columns(
+  cs.starts_with("num_of_").fill_null(cs.starts_with("num_of_").mean())
+)
+
+cleaned_df = cleaned_df.with_columns(
+  cs.starts_with("minutes_").fill_null(cs.starts_with("minutes_").median())
+)
+
+cleaned_df
 
 
 ```
@@ -70,10 +193,25 @@ _Nothing to write/report for this question_
  
 3. __Display a histogram for num_of_delays_carrier and for minutes_delayed_nas (2 separate histograms in total). Comment on the shape of each one. Also report the mean of each of these columns now that missing values have been filled in.__
 
-_Describe your results and analysis here_
+Its interesting that there is a spike in both. Maybe its an error in the data? Both spikes are about 2x any other value. 
+The mean number of delays is 685 for the number of delays for the carrier and its 69682.6 for the minutes delayed.
+
 
 ```{python}
-# Include and execute your code here
+display(
+  ggplot(data=cleaned_df, mapping=aes(x="num_of_delays_carrier"))
+  + geom_histogram()
+)
+display(
+  ggplot(data=cleaned_df, mapping=aes(x="minutes_delayed_nas"))
+  + geom_histogram()
+)
 
+
+mean = cleaned_df.select(
+  pl.col("num_of_delays_carrier").mean().alias("mean_num_of_delays_carrier"),
+  pl.col("minutes_delayed_nas").mean().alias("mean_minutes_delayed_nas")
+)
+display(mean)
 
 ```

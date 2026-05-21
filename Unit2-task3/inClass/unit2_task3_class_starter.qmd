@@ -107,4 +107,4 @@ print(df.write_ndjson())
 - fill_nan()
 - when().then()...
 - workflow... chain stuff together
-- convert bad calues to null, then fill_null (You wouldnt want to use like -999 in the mean calculation to fill in the value)
+- convert bad values to null, then fill_null (You wouldnt want to use like -999 in the mean calculation to fill in the value)
