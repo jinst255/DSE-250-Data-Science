@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Justin Hair">
+
+<title>Unit 2 Stretch</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="Unit2-stretch_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Unit2-stretch_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Unit2-stretch_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Unit2-stretch_files/libs/quarto-html/popper.min.js"></script>
+<script src="Unit2-stretch_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Unit2-stretch_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Unit2-stretch_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Unit2-stretch_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Unit2-stretch_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Unit2-stretch_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Unit2-stretch_files/libs/bootstrap/bootstrap-ea5ce59d92d9095ff0684c0bc16c2344.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Unit 2 Stretch</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Justin Hair </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="a2717ece" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lets_plot <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> io</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars.selectors <span class="im">as</span> cs</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>LetsPlot.setup_html(isolated_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># pull json data from https://github.com/byuidatascience/data4missing/raw/master/data-raw/flights_missing/flights_missing.json</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(<span class="st">"https://github.com/byuidatascience/data4missing/raw/master/data-raw/flights_missing/flights_missing.json"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.read_json(io.BytesIO(response.content))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="002fd4df" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use cleaned data from Task 3 </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>nullified_df <span class="op">=</span> df</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fix airport_code (!= 3 chars)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> df.<span class="bu">filter</span>(pl.col(<span class="st">"airport_code"</span>).<span class="bu">str</span>.len_chars() <span class="op">!=</span> <span class="dv">3</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># print(errors) # There are 0 errors in "airport_code"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># fix airport_name (&lt;4 chars)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> df.<span class="bu">filter</span>(pl.col(<span class="st">"airport_name"</span>).<span class="bu">str</span>.len_chars() <span class="op">&lt;</span> <span class="dv">4</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># print(errors["airport_name"].unique()) # This prints out every unique value. In this case there are 56 instances of empty strings. </span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>nullified_df <span class="op">=</span> nullified_df.with_columns(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    pl.when(pl.col(<span class="st">"airport_name"</span>).<span class="bu">str</span>.len_chars() <span class="op">&gt;=</span> <span class="dv">4</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    .then(pl.col(<span class="st">"airport_name"</span>))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    .otherwise(<span class="va">None</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    .alias(<span class="st">"airport_name"</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># fix month (!= .isin(Jan-Dec))</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>months <span class="op">=</span> [<span class="st">"January"</span>, <span class="st">"February"</span>, <span class="st">"Febuary"</span>, <span class="st">"March"</span>, <span class="st">"April"</span>, <span class="st">"May"</span>, <span class="st">"June"</span>, <span class="st">"July"</span>, <span class="st">"August"</span>, <span class="st">"September"</span>, <span class="st">"October"</span>, <span class="st">"November"</span>, <span class="st">"December"</span>]</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> df.<span class="bu">filter</span>(<span class="op">~</span>pl.col(<span class="st">"month"</span>).is_in(months))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># print(errors["month"].unique()) # Its just the misspelling of "February" and also "n/a"</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># print(len(errors)) # 27 errors. (its "n/a")</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>nullified_df <span class="op">=</span> nullified_df.with_columns(</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    pl.when(pl.col(<span class="st">"month"</span>).is_in(months))</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    .then(pl.col(<span class="st">"month"</span>))</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    .otherwise(<span class="va">None</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    .alias(<span class="st">"month"</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co"># if "num_of_delays_carrier" contains non numerical chars, convert to null</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>errors <span class="op">=</span> df.<span class="bu">filter</span>(pl.col(<span class="st">"num_of_delays_carrier"</span>).<span class="bu">str</span>.contains(<span class="vs">r"</span><span class="pp">[^0-9]</span><span class="vs">"</span>))</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># print(errors["num_of_delays_carrier"].unique())</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co"># print(len(errors)) # 73 instances of "1500+"</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>nullified_df <span class="op">=</span> nullified_df.with_columns(</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  pl.when(pl.col(<span class="st">"num_of_delays_carrier"</span>) <span class="op">==</span> <span class="st">"1500+"</span>)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  .then(<span class="va">None</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  .otherwise(pl.col(<span class="st">"num_of_delays_carrier"</span>))</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  .alias(<span class="st">"num_of_delays_carrier"</span>)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Cast num_of_delays_carrier to i64</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>nullified_df <span class="op">=</span> nullified_df.with_columns(</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_carrier"</span>).cast(pl.Int64)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Check all i64 columns for negative values, convert to null</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>columns_that_are_ints <span class="op">=</span> nullified_df.select(cs.by_dtype(pl.Int64)).columns</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>nullified_df <span class="op">=</span> nullified_df.with_columns(</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>     [</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>         pl.when(pl.col(col) <span class="op">&lt;</span> <span class="dv">0</span>)</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>         .then(<span class="va">None</span>)</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>         .otherwise(pl.col(col))</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>         .alias(col)</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>         <span class="cf">for</span> col <span class="kw">in</span> columns_that_are_ints</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>     ]</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a> )</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>cleaned_df <span class="op">=</span> nullified_df</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate medians for all 5 ints.</span></span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>pl.col(<span class="st">"minutes_delayed_carrier"</span>).fill_null(pl.col(<span class="st">"minutes_delayed_carrier"</span>).median())</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>cleaned_df <span class="op">=</span> cleaned_df.with_columns(</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>  pl.col(<span class="st">"year"</span>).fill_null(pl.col(<span class="st">"year"</span>).median())</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>cleaned_df <span class="op">=</span> cleaned_df.with_columns(</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>  cs.starts_with(<span class="st">"num_of_"</span>).fill_null(cs.starts_with(<span class="st">"num_of_"</span>).median())</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>cleaned_df <span class="op">=</span> cleaned_df.with_columns(</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>  cs.starts_with(<span class="st">"minutes_"</span>).fill_null(cs.starts_with(<span class="st">"minutes_"</span>).median())</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> cleaned_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="586fdf24" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>display(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (924, 17)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">airport_code</th>
+<th data-quarto-table-cell-role="th">airport_name</th>
+<th data-quarto-table-cell-role="th">month</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">num_of_flights_total</th>
+<th data-quarto-table-cell-role="th">num_of_delays_carrier</th>
+<th data-quarto-table-cell-role="th">num_of_delays_late_aircraft</th>
+<th data-quarto-table-cell-role="th">num_of_delays_nas</th>
+<th data-quarto-table-cell-role="th">num_of_delays_security</th>
+<th data-quarto-table-cell-role="th">num_of_delays_weather</th>
+<th data-quarto-table-cell-role="th">num_of_delays_total</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_carrier</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_late_aircraft</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_nas</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_security</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_weather</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_total</th>
+</tr>
+<tr class="even">
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"ATL"</td>
+<td>"Atlanta, GA: Hartsfield-Jackso…</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>35048.0</td>
+<td>617.0</td>
+<td>849.5</td>
+<td>4598.0</td>
+<td>10.0</td>
+<td>448.0</td>
+<td>8355.0</td>
+<td>116423.0</td>
+<td>104415.0</td>
+<td>207467.0</td>
+<td>297.0</td>
+<td>36931.0</td>
+<td>465533.0</td>
+</tr>
+<tr class="even">
+<td>"DEN"</td>
+<td>"Denver, CO: Denver Internation…</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>12687.0</td>
+<td>1041.0</td>
+<td>928.0</td>
+<td>935.0</td>
+<td>11.0</td>
+<td>233.0</td>
+<td>3153.0</td>
+<td>53537.0</td>
+<td>70301.0</td>
+<td>36817.0</td>
+<td>363.0</td>
+<td>21779.0</td>
+<td>182797.0</td>
+</tr>
+<tr class="odd">
+<td>"IAD"</td>
+<td>null</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>12381.0</td>
+<td>414.0</td>
+<td>1058.0</td>
+<td>895.0</td>
+<td>4.0</td>
+<td>61.0</td>
+<td>2430.0</td>
+<td>38784.5</td>
+<td>70919.0</td>
+<td>35660.0</td>
+<td>208.0</td>
+<td>4497.0</td>
+<td>134881.0</td>
+</tr>
+<tr class="even">
+<td>"ORD"</td>
+<td>"Chicago, IL: Chicago O'Hare In…</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>28194.0</td>
+<td>1197.0</td>
+<td>2255.0</td>
+<td>5415.0</td>
+<td>5.0</td>
+<td>306.0</td>
+<td>9178.0</td>
+<td>88691.0</td>
+<td>160811.0</td>
+<td>364382.0</td>
+<td>151.0</td>
+<td>24859.0</td>
+<td>638894.0</td>
+</tr>
+<tr class="odd">
+<td>"SAN"</td>
+<td>"San Diego, CA: San Diego Inter…</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>7283.0</td>
+<td>572.0</td>
+<td>680.0</td>
+<td>638.0</td>
+<td>7.0</td>
+<td>56.0</td>
+<td>1952.0</td>
+<td>27436.0</td>
+<td>38445.0</td>
+<td>21127.0</td>
+<td>218.0</td>
+<td>4326.0</td>
+<td>91552.0</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="odd">
+<td>"IAD"</td>
+<td>"Washington, DC: Washington Dul…</td>
+<td>"December"</td>
+<td>2015.0</td>
+<td>2799.0</td>
+<td>182.0</td>
+<td>183.0</td>
+<td>61.0</td>
+<td>0.0</td>
+<td>17.0</td>
+<td>443.0</td>
+<td>38784.5</td>
+<td>15438.0</td>
+<td>2826.0</td>
+<td>0.0</td>
+<td>1825.0</td>
+<td>31164.0</td>
+</tr>
+<tr class="even">
+<td>"ORD"</td>
+<td>"Chicago, IL: Chicago O'Hare In…</td>
+<td>"December"</td>
+<td>2015.0</td>
+<td>25568.0</td>
+<td>923.0</td>
+<td>1755.0</td>
+<td>1364.0</td>
+<td>11.0</td>
+<td>180.0</td>
+<td>4233.0</td>
+<td>80962.0</td>
+<td>132055.0</td>
+<td>72045.0</td>
+<td>435.0</td>
+<td>22459.0</td>
+<td>307956.0</td>
+</tr>
+<tr class="odd">
+<td>"SAN"</td>
+<td>"San Diego, CA: San Diego Inter…</td>
+<td>null</td>
+<td>2015.0</td>
+<td>6231.0</td>
+<td>480.0</td>
+<td>606.0</td>
+<td>256.0</td>
+<td>5.0</td>
+<td>37.0</td>
+<td>1383.0</td>
+<td>25402.0</td>
+<td>35796.0</td>
+<td>9038.0</td>
+<td>161.0</td>
+<td>2742.0</td>
+<td>73139.0</td>
+</tr>
+<tr class="even">
+<td>"SFO"</td>
+<td>"San Francisco, CA: San Francis…</td>
+<td>"December"</td>
+<td>2015.0</td>
+<td>13833.0</td>
+<td>757.0</td>
+<td>1180.0</td>
+<td>2372.0</td>
+<td>9.0</td>
+<td>147.0</td>
+<td>4465.0</td>
+<td>55283.0</td>
+<td>96703.0</td>
+<td>193525.0</td>
+<td>285.0</td>
+<td>13788.0</td>
+<td>359584.0</td>
+</tr>
+<tr class="odd">
+<td>"SLC"</td>
+<td>"Salt Lake City, UT: Salt Lake …</td>
+<td>"December"</td>
+<td>2015.0</td>
+<td>8804.0</td>
+<td>483.0</td>
+<td>796.0</td>
+<td>404.0</td>
+<td>5.0</td>
+<td>56.0</td>
+<td>1745.0</td>
+<td>37354.0</td>
+<td>49549.0</td>
+<td>13515.0</td>
+<td>158.0</td>
+<td>6693.0</td>
+<td>107269.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Which delay is the worst delay? Keep working with the cleaned dataset you created in the previous task. Compare the proportion of flights delayed due to Carrier, to Security, and to Late Aircraft. Show this comparison in a Chart and a Table.</p>
+<p>The worst delay is due to late aircrafts which comes in at 61.38% of delays.</p>
+<div id="cac48f55" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">Todo:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">- sum up each column</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">- get the grand total</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">- compute proportions for the 3 columns</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">- drop the unneeded columns</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">- display the table</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">- create a chart from the proportions</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>Q1 <span class="op">=</span> df.select(</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_carrier"</span>).<span class="bu">sum</span>()).alias(<span class="st">"Carrier"</span>),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_security"</span>).<span class="bu">sum</span>()).alias(<span class="st">"Security"</span>),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_late_aircraft"</span>).<span class="bu">sum</span>()).alias(<span class="st">"Late Aircraft"</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Carrier"</span>) <span class="op">+</span> pl.col(<span class="st">"Security"</span>) <span class="op">+</span> pl.col(<span class="st">"Late Aircraft"</span>)).alias(<span class="st">"Grand_total"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Carrier"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Carrier_Proportion"</span>),</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Security"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Security_Proportion"</span>),</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Late Aircraft"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Late_Aircraft_Proportion"</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>).drop(<span class="st">"Carrier"</span>, <span class="st">"Security"</span>, <span class="st">"Late Aircraft"</span>, <span class="st">"Grand_total"</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>display(Q1)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Now I'll unpivot it so I can make a nice bar chart</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>Q1_long <span class="op">=</span> Q1.unpivot(</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">"Late_Aircraft_Proportion"</span>, <span class="st">"Carrier_Proportion"</span>, <span class="st">"Security_Proportion"</span>], <span class="co"># I put them in order here </span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"Delay_Type"</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">"Proportion"</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q1_long)</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    ggplot(data<span class="op">=</span>Q1_long, mapping<span class="op">=</span>aes(x<span class="op">=</span><span class="st">"Delay_Type"</span>, y<span class="op">=</span><span class="st">"Proportion"</span>))</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">"identity"</span>)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> theme_gray()</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (1, 3)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">Carrier_Proportion</th>
+<th data-quarto-table-cell-role="th">Security_Proportion</th>
+<th data-quarto-table-cell-role="th">Late_Aircraft_Proportion</th>
+</tr>
+<tr class="even">
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.383196</td>
+<td>0.003029</td>
+<td>0.613776</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+
+   
+       <meta charset="UTF-8">
+       <style> html, body { margin: 0; padding: 0; } </style>
+       <script type="text/javascript" data-lets-plot-script="library" src="https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.9.0/js-package/distr/lets-plot.min.js"></script>
+   
+   
+          <div id="eFyKY4"></div>
+   <script type="text/javascript" data-lets-plot-script="plot">
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: "MIN",
+       height_mode: "SCALED",
+       width: null, 
+       height: null 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById("eFyKY4");
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+"data":{
+"Delay_Type":["Late_Aircraft_Proportion","Carrier_Proportion","Security_Proportion"],
+"Proportion":[0.6137755654608302,0.38319557445181324,0.003028860087356536]
+},
+"mapping":{
+"x":"Delay_Type",
+"y":"Proportion"
+},
+"data_meta":{
+"series_annotations":[{
+"type":"str",
+"column":"Delay_Type"
+},{
+"type":"float",
+"column":"Proportion"
+}]
+},
+"theme":{
+"name":"gray"
+},
+"kind":"plot",
+"scales":[],
+"layers":[{
+"geom":"bar",
+"stat":"identity",
+"mapping":{
+},
+"data_meta":{
+},
+"data":{
+}
+}],
+"metainfo_list":[],
+"spec_id":"5"
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' && 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize && 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive && observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   </script>
+   
+
+</div>
+</div>
+<p>Create another chart that shows the proportion of delays for each reason (Carrier, Security, and Late Aircraft) across all 7 airports.</p>
+<p>The airport with the most security delays is SLC according to the data. The airport with the most carrier delays is SAN. The airport with the most late aircraft delays is ORD.</p>
+<div id="f4c9d88f" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">What I need: </span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">- 3 columns: airport_code, delay_Type, Proportion</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">Todo:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">- research how to get 7 different charts in the same chart. </span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">     (I'm deffinitely doing stacked bar charts, looks cool)</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">- group by airport_code for airport isolation</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">- sum the 3 delay columns</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">- get grand total for each airport</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">- compute proportions per airport</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">- unpivot so each row is a delay type</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">- plot stacked bar chart (x=airport, x=proportion)</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>display(df)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>Q2_wide <span class="op">=</span> df.group_by(<span class="st">"airport_code"</span>).agg(</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_carrier"</span>).<span class="bu">sum</span>(),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_security"</span>).<span class="bu">sum</span>(),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_late_aircraft"</span>).<span class="bu">sum</span>()</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    pl.sum_horizontal(</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"num_of_delays_carrier"</span>, <span class="st">"num_of_delays_security"</span>, <span class="st">"num_of_delays_late_aircraft"</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    ).alias(<span class="st">"Grand_total"</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_carrier"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Carrier_Proportion"</span>),</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_security"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Security_Proportion"</span>),</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_late_aircraft"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Late_Aircraft_Proportion"</span>),</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>).drop(</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"num_of_delays_carrier"</span>, <span class="st">"num_of_delays_security"</span>, <span class="st">"num_of_delays_late_aircraft"</span>, <span class="st">"Grand_total"</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q2_wide)</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>Q2_long <span class="op">=</span> Q2_wide.unpivot(</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"airport_code"</span>],</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">"Carrier_Proportion"</span>, <span class="st">"Security_Proportion"</span>, <span class="st">"Late_Aircraft_Proportion"</span>],</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"Delay_Type"</span>,</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">"Proportion"</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q2_long)</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    ggplot(data<span class="op">=</span>Q2_long, mapping<span class="op">=</span>aes(x<span class="op">=</span><span class="st">"airport_code"</span>, y<span class="op">=</span><span class="st">"Proportion"</span>, fill<span class="op">=</span><span class="st">"Delay_Type"</span>))</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">"identity"</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> theme_gray()</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (924, 17)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">airport_code</th>
+<th data-quarto-table-cell-role="th">airport_name</th>
+<th data-quarto-table-cell-role="th">month</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">num_of_flights_total</th>
+<th data-quarto-table-cell-role="th">num_of_delays_carrier</th>
+<th data-quarto-table-cell-role="th">num_of_delays_late_aircraft</th>
+<th data-quarto-table-cell-role="th">num_of_delays_nas</th>
+<th data-quarto-table-cell-role="th">num_of_delays_security</th>
+<th data-quarto-table-cell-role="th">num_of_delays_weather</th>
+<th data-quarto-table-cell-role="th">num_of_delays_total</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_carrier</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_late_aircraft</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_nas</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_security</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_weather</th>
+<th data-quarto-table-cell-role="th">minutes_delayed_total</th>
+</tr>
+<tr class="even">
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+<td>f64</td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>"ATL"</td>
+<td>"Atlanta, GA: Hartsfield-Jackso…</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>35048.0</td>
+<td>617.0</td>
+<td>849.5</td>
+<td>4598.0</td>
+<td>10.0</td>
+<td>448.0</td>
+<td>8355.0</td>
+<td>116423.0</td>
+<td>104415.0</td>
+<td>207467.0</td>
+<td>297.0</td>
+<td>36931.0</td>
+<td>465533.0</td>
+</tr>
+<tr class="even">
+<td>"DEN"</td>
+<td>"Denver, CO: Denver Internation…</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>12687.0</td>
+<td>1041.0</td>
+<td>928.0</td>
+<td>935.0</td>
+<td>11.0</td>
+<td>233.0</td>
+<td>3153.0</td>
+<td>53537.0</td>
+<td>70301.0</td>
+<td>36817.0</td>
+<td>363.0</td>
+<td>21779.0</td>
+<td>182797.0</td>
+</tr>
+<tr class="odd">
+<td>"IAD"</td>
+<td>null</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>12381.0</td>
+<td>414.0</td>
+<td>1058.0</td>
+<td>895.0</td>
+<td>4.0</td>
+<td>61.0</td>
+<td>2430.0</td>
+<td>38784.5</td>
+<td>70919.0</td>
+<td>35660.0</td>
+<td>208.0</td>
+<td>4497.0</td>
+<td>134881.0</td>
+</tr>
+<tr class="even">
+<td>"ORD"</td>
+<td>"Chicago, IL: Chicago O'Hare In…</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>28194.0</td>
+<td>1197.0</td>
+<td>2255.0</td>
+<td>5415.0</td>
+<td>5.0</td>
+<td>306.0</td>
+<td>9178.0</td>
+<td>88691.0</td>
+<td>160811.0</td>
+<td>364382.0</td>
+<td>151.0</td>
+<td>24859.0</td>
+<td>638894.0</td>
+</tr>
+<tr class="odd">
+<td>"SAN"</td>
+<td>"San Diego, CA: San Diego Inter…</td>
+<td>"January"</td>
+<td>2005.0</td>
+<td>7283.0</td>
+<td>572.0</td>
+<td>680.0</td>
+<td>638.0</td>
+<td>7.0</td>
+<td>56.0</td>
+<td>1952.0</td>
+<td>27436.0</td>
+<td>38445.0</td>
+<td>21127.0</td>
+<td>218.0</td>
+<td>4326.0</td>
+<td>91552.0</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="odd">
+<td>"IAD"</td>
+<td>"Washington, DC: Washington Dul…</td>
+<td>"December"</td>
+<td>2015.0</td>
+<td>2799.0</td>
+<td>182.0</td>
+<td>183.0</td>
+<td>61.0</td>
+<td>0.0</td>
+<td>17.0</td>
+<td>443.0</td>
+<td>38784.5</td>
+<td>15438.0</td>
+<td>2826.0</td>
+<td>0.0</td>
+<td>1825.0</td>
+<td>31164.0</td>
+</tr>
+<tr class="even">
+<td>"ORD"</td>
+<td>"Chicago, IL: Chicago O'Hare In…</td>
+<td>"December"</td>
+<td>2015.0</td>
+<td>25568.0</td>
+<td>923.0</td>
+<td>1755.0</td>
+<td>1364.0</td>
+<td>11.0</td>
+<td>180.0</td>
+<td>4233.0</td>
+<td>80962.0</td>
+<td>132055.0</td>
+<td>72045.0</td>
+<td>435.0</td>
+<td>22459.0</td>
+<td>307956.0</td>
+</tr>
+<tr class="odd">
+<td>"SAN"</td>
+<td>"San Diego, CA: San Diego Inter…</td>
+<td>null</td>
+<td>2015.0</td>
+<td>6231.0</td>
+<td>480.0</td>
+<td>606.0</td>
+<td>256.0</td>
+<td>5.0</td>
+<td>37.0</td>
+<td>1383.0</td>
+<td>25402.0</td>
+<td>35796.0</td>
+<td>9038.0</td>
+<td>161.0</td>
+<td>2742.0</td>
+<td>73139.0</td>
+</tr>
+<tr class="even">
+<td>"SFO"</td>
+<td>"San Francisco, CA: San Francis…</td>
+<td>"December"</td>
+<td>2015.0</td>
+<td>13833.0</td>
+<td>757.0</td>
+<td>1180.0</td>
+<td>2372.0</td>
+<td>9.0</td>
+<td>147.0</td>
+<td>4465.0</td>
+<td>55283.0</td>
+<td>96703.0</td>
+<td>193525.0</td>
+<td>285.0</td>
+<td>13788.0</td>
+<td>359584.0</td>
+</tr>
+<tr class="odd">
+<td>"SLC"</td>
+<td>"Salt Lake City, UT: Salt Lake …</td>
+<td>"December"</td>
+<td>2015.0</td>
+<td>8804.0</td>
+<td>483.0</td>
+<td>796.0</td>
+<td>404.0</td>
+<td>5.0</td>
+<td>56.0</td>
+<td>1745.0</td>
+<td>37354.0</td>
+<td>49549.0</td>
+<td>13515.0</td>
+<td>158.0</td>
+<td>6693.0</td>
+<td>107269.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+
+   
+       <meta charset="UTF-8">
+       <style> html, body { margin: 0; padding: 0; } </style>
+       <script type="text/javascript" data-lets-plot-script="library" src="https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.9.0/js-package/distr/lets-plot.min.js"></script>
+   
+   
+          <div id="axS8uv"></div>
+   <script type="text/javascript" data-lets-plot-script="plot">
+   
+   (function() {
+   // ----------
+   
+   const forceImmediateRender = false;
+   const responsive = false;
+   
+   let sizing = {
+       width_mode: "MIN",
+       height_mode: "SCALED",
+       width: null, 
+       height: null 
+   };
+   
+   const preferredWidth = document.body.dataset.letsPlotPreferredWidth;
+   if (preferredWidth !== undefined) {
+       sizing = {
+           width_mode: 'FIXED',
+           height_mode: 'SCALED',
+           width: parseFloat(preferredWidth)
+       };
+   }
+   
+   const containerDiv = document.getElementById("axS8uv");
+   let fig = null;
+   
+   function renderPlot() {
+       if (fig === null) {
+           const plotSpec = {
+"data":{
+"airport_code":["DEN","IAD","SAN","SFO","ORD","SLC","ATL","DEN","IAD","SAN","SFO","ORD","SLC","ATL","DEN","IAD","SAN","SFO","ORD","SLC","ATL"],
+"Delay_Type":["Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion"],
+"Proportion":[0.39179293820339883,0.42315052715513424,0.4455588398156308,0.4090087275894057,0.3304548385496751,0.444042971453886,0.3605486426135708,0.003310112140550386,0.0024098520421724106,0.0038215268949704025,0.003298877340451714,0.0021377907841872924,0.006001329014037711,0.0023456133088916482,0.6048969496560508,0.5744396208026934,0.5506196332893988,0.5876923950701426,0.6674073706661376,0.5499556995320763,0.6371057440775376]
+},
+"mapping":{
+"x":"airport_code",
+"y":"Proportion",
+"fill":"Delay_Type"
+},
+"data_meta":{
+"series_annotations":[{
+"type":"str",
+"column":"airport_code"
+},{
+"type":"str",
+"column":"Delay_Type"
+},{
+"type":"float",
+"column":"Proportion"
+}]
+},
+"theme":{
+"name":"gray"
+},
+"kind":"plot",
+"scales":[],
+"layers":[{
+"geom":"bar",
+"stat":"identity",
+"mapping":{
+},
+"data_meta":{
+},
+"data":{
+}
+}],
+"metainfo_list":[],
+"spec_id":"6"
+};
+           fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
+       } else {
+           fig.updateView({});
+       }
+   }
+   
+   const renderImmediately = 
+       forceImmediateRender || (
+           sizing.width_mode === 'FIXED' && 
+           (sizing.height_mode === 'FIXED' || sizing.height_mode === 'SCALED')
+       );
+   
+   if (renderImmediately) {
+       renderPlot();
+   }
+   
+   if (!renderImmediately || responsive) {
+       // Set up observer for initial sizing or continuous monitoring
+       var observer = new ResizeObserver(function(entries) {
+           for (let entry of entries) {
+               if (entry.contentBoxSize && 
+                   entry.contentBoxSize[0].inlineSize > 0) {
+                   if (!responsive && observer) {
+                       observer.disconnect();
+                       observer = null;
+                   }
+                   renderPlot();
+                   if (!responsive) {
+                       break;
+                   }
+               }
+           }
+       });
+       
+       observer.observe(containerDiv);
+   }
+   
+   // ----------
+   })();
+   
+   </script>
+   
+
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

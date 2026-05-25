@@ -1,7 +1,11 @@
 ---
 title: "Unit 2 Stretch"
-format: html
-
+author: "Justin Hair"
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
 ---
 
 
@@ -21,42 +25,201 @@ df = pl.read_json(io.BytesIO(response.content))
 ```
 
 ```{python}
-# Use cleaned data from Task 3 (I used AI to summerize it to save time copying and pasting)
-# Minimal cleaning: normalize obvious errors, set impossible values to null
-nullified_df = df.with_columns(
+# Use cleaned data from Task 3 
+
+nullified_df = df
+
+# fix airport_code (!= 3 chars)
+errors = df.filter(pl.col("airport_code").str.len_chars() != 3)
+# print(errors) # There are 0 errors in "airport_code"
+
+# fix airport_name (<4 chars)
+errors = df.filter(pl.col("airport_name").str.len_chars() < 4)
+# print(errors["airport_name"].unique()) # This prints out every unique value. In this case there are 56 instances of empty strings. 
+
+nullified_df = nullified_df.with_columns(
     pl.when(pl.col("airport_name").str.len_chars() >= 4)
     .then(pl.col("airport_name"))
     .otherwise(None)
-    .alias("airport_name"),
+    .alias("airport_name")
+)
 
-    pl.when(pl.col("month").is_in([
-        "January","February","Febuary","March","April","May","June",
-        "July","August","September","October","November","December"
-    ]))
+
+# fix month (!= .isin(Jan-Dec))
+months = ["January", "February", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+errors = df.filter(~pl.col("month").is_in(months))
+# print(errors["month"].unique()) # Its just the misspelling of "February" and also "n/a"
+# print(len(errors)) # 27 errors. (its "n/a")
+
+nullified_df = nullified_df.with_columns(
+    pl.when(pl.col("month").is_in(months))
     .then(pl.col("month"))
     .otherwise(None)
-    .alias("month"),
+    .alias("month")
+)
 
-    pl.when(pl.col("num_of_delays_carrier") == "1500+")
-    .then(None)
-    .otherwise(pl.col("num_of_delays_carrier"))
-    .alias("num_of_delays_carrier"),
-).with_columns(
+# if "num_of_delays_carrier" contains non numerical chars, convert to null
+errors = df.filter(pl.col("num_of_delays_carrier").str.contains(r"[^0-9]"))
+# print(errors["num_of_delays_carrier"].unique())
+# print(len(errors)) # 73 instances of "1500+"
+
+nullified_df = nullified_df.with_columns(
+  pl.when(pl.col("num_of_delays_carrier") == "1500+")
+  .then(None)
+  .otherwise(pl.col("num_of_delays_carrier"))
+  .alias("num_of_delays_carrier")
+)
+
+
+# Cast num_of_delays_carrier to i64
+nullified_df = nullified_df.with_columns(
     pl.col("num_of_delays_carrier").cast(pl.Int64)
 )
 
-int_cols = nullified_df.select(cs.by_dtype(pl.Int64)).columns
+# Check all i64 columns for negative values, convert to null
+columns_that_are_ints = nullified_df.select(cs.by_dtype(pl.Int64)).columns
+
 nullified_df = nullified_df.with_columns(
-    [pl.when(pl.col(c) < 0).then(None).otherwise(pl.col(c)).alias(c) for c in int_cols]
+     [
+         pl.when(pl.col(col) < 0)
+         .then(None)
+         .otherwise(pl.col(col))
+         .alias(col)
+         for col in columns_that_are_ints
+     ]
+ )
+
+cleaned_df = nullified_df
+
+# Calculate medians for all 5 ints.
+pl.col("minutes_delayed_carrier").fill_null(pl.col("minutes_delayed_carrier").median())
+
+cleaned_df = cleaned_df.with_columns(
+  pl.col("year").fill_null(pl.col("year").median())
 )
 
-cleaned_df = nullified_df.with_columns(
-    cs.starts_with("num_of_").fill_null(cs.starts_with("num_of_").mean()),
-    cs.starts_with("minutes_").fill_null(cs.starts_with("minutes_").median())
+cleaned_df = cleaned_df.with_columns(
+  cs.starts_with("num_of_").fill_null(cs.starts_with("num_of_").median())
 )
+
+cleaned_df = cleaned_df.with_columns(
+  cs.starts_with("minutes_").fill_null(cs.starts_with("minutes_").median())
+)
+
+df = cleaned_df
+
 ```
 
 
 ```{python}
-display(cleaned_df)
+display(df)
+```
+
+
+Which delay is the worst delay? Keep working with the cleaned dataset you created in the previous task. Compare the proportion of flights delayed due to Carrier, to Security, and to Late Aircraft. Show this comparison in a Chart and a Table. 
+
+The worst delay is due to late aircrafts which comes in at 61.38% of delays.
+
+```{python}
+'''
+Todo:
+- sum up each column
+- get the grand total
+- compute proportions for the 3 columns
+- drop the unneeded columns
+- display the table
+- create a chart from the proportions
+'''
+
+Q1 = df.select(
+    (pl.col("num_of_delays_carrier").sum()).alias("Carrier"),
+    (pl.col("num_of_delays_security").sum()).alias("Security"),
+    (pl.col("num_of_delays_late_aircraft").sum()).alias("Late Aircraft")
+).with_columns(
+    (pl.col("Carrier") + pl.col("Security") + pl.col("Late Aircraft")).alias("Grand_total")
+).with_columns(
+    (pl.col("Carrier") / pl.col("Grand_total")).alias("Carrier_Proportion"),
+    (pl.col("Security") / pl.col("Grand_total")).alias("Security_Proportion"),
+    (pl.col("Late Aircraft") / pl.col("Grand_total")).alias("Late_Aircraft_Proportion")
+).drop("Carrier", "Security", "Late Aircraft", "Grand_total")
+
+display(Q1)
+
+# Now I'll unpivot it so I can make a nice bar chart
+Q1_long = Q1.unpivot(
+    on=["Late_Aircraft_Proportion", "Carrier_Proportion", "Security_Proportion"], # I put them in order here 
+    variable_name="Delay_Type",
+    value_name="Proportion"
+)
+
+# display(Q1_long)
+
+(
+    ggplot(data=Q1_long, mapping=aes(x="Delay_Type", y="Proportion"))
+    + geom_bar(stat="identity")
+
+    + theme_gray()
+)
+
+```
+
+
+Create another chart that shows the proportion of delays for each reason (Carrier, Security, and Late Aircraft) across all 7 airports. 
+
+The airport with the most security delays is SLC according to the data. The airport with the most carrier delays is SAN. The airport with the most late aircraft delays is ORD.
+
+```{python}
+"""
+What I need: 
+- 3 columns: airport_code, delay_Type, Proportion
+
+Todo:
+- research how to get 7 different charts in the same chart. 
+     (I'm deffinitely doing stacked bar charts, looks cool)
+
+- group by airport_code for airport isolation
+- sum the 3 delay columns
+- get grand total for each airport
+- compute proportions per airport
+- unpivot so each row is a delay type
+- plot stacked bar chart (x=airport, x=proportion)
+"""
+
+display(df)
+
+Q2_wide = df.group_by("airport_code").agg(
+    pl.col("num_of_delays_carrier").sum(),
+    pl.col("num_of_delays_security").sum(),
+    pl.col("num_of_delays_late_aircraft").sum()
+).with_columns(
+    pl.sum_horizontal(
+        "num_of_delays_carrier", "num_of_delays_security", "num_of_delays_late_aircraft"
+    ).alias("Grand_total")
+).with_columns(
+    (pl.col("num_of_delays_carrier") / pl.col("Grand_total")).alias("Carrier_Proportion"),
+    (pl.col("num_of_delays_security") / pl.col("Grand_total")).alias("Security_Proportion"),
+    (pl.col("num_of_delays_late_aircraft") / pl.col("Grand_total")).alias("Late_Aircraft_Proportion"),
+).drop(
+    "num_of_delays_carrier", "num_of_delays_security", "num_of_delays_late_aircraft", "Grand_total"
+)
+
+# display(Q2_wide)
+
+Q2_long = Q2_wide.unpivot(
+    index=["airport_code"],
+    on=["Carrier_Proportion", "Security_Proportion", "Late_Aircraft_Proportion"],
+    variable_name="Delay_Type",
+    value_name="Proportion"
+)
+
+# display(Q2_long)
+
+(
+    ggplot(data=Q2_long, mapping=aes(x="airport_code", y="Proportion", fill="Delay_Type"))
+    + geom_bar(stat="identity")
+
+    + theme_gray()
+)
+
+
 ```
