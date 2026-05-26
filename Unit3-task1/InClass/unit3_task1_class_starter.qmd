@@ -1,0 +1,94 @@
+---
+title: "Client Report - Baseball Database"
+subtitle: "Unit 3 Task 1"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+import sqlite3
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+
+# connect to the database
+```{python}
+sqlite_file = "/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/Unit3-task1/InClass/lahmansbaseballdb.sqlite"
+
+conn = sqlite3.connect(sqlite_file)
+```
+
+# run queries
+```{python}
+q = "SELECT * FROM batting"
+
+results = pl.read_database(q, conn, infer_schema_length=None)
+results
+```
+
+```{python}
+q = """
+    SELECT *
+      FROM managers
+
+"""
+
+managers = pl.read_database(q, conn)
+managers
+```
+
+
+
+
+```{python}
+(
+managers.group_by("playerID").agg(
+  pl.col("G").sum(),
+  pl.col("W").sum(),
+  pl.col("L").sum()
+).with_columns(ratio=(pl.col("W") / pl.col("G")))
+  .sort(pl.col("ratio"), descending=True)
+  .filter(pl.col("G") > 150)
+)
+
+```
+
+```{python}
+q = "SELECT playerID, nameFirst, nameLast FROM people"
+people = pl.read_database(q, conn)
+
+best_manager_row = (
+  managers.group_by("playerID")
+  .agg(pl.col("G").sum(), pl.col("W").sum())
+  .with_columns(ratio=pl.col("W") / pl.col("G"))
+  .filter(pl.col("G") > 150)
+  .sort("ratio", descending=True)
+  .head(1)
+  .join(people, on="playerID", how="left")
+)
+
+best_manager_row
+```
