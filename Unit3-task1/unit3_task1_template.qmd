@@ -39,7 +39,7 @@ LetsPlot.setup_html(isolated_frame=True)
 # Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
 
 # Include and execute your code here
-sqlite_file = 'lahmansbaseballdb.sqlite'
+sqlite_file = '/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/Unit3-task1/InClass/lahmansbaseballdb.sqlite'
 # this file must be in the same location as your .qmd or .py file
 con = sqlite3.connect(sqlite_file)
 ```
@@ -64,12 +64,21 @@ __Use the provided code above to read in the batting table. Then, with Python Po
 
 Note: A batting average is meant to measure how often a player puts the ball in play and gets to base safely. For this task, use a simplified version of batting average defined as the sum of hits (labeled 'H') divided by number of at bats (labeled 'AB').
 
-_type your results and analysis here_
+nymanny01 is the best when it comes to batting average.
 
 ```{python}
-# Include and execute your code here
+"""
+I'll need to get H, AB, and playerID. I also might as well pull in yearID. group by playerID and yearID, then calculate the batting average and save it as a new column. Then I can sort. 
+"""
 
+df = results.select("playerID", "H", "AB", "yearID").group_by("playerID", "yearID").agg(
+  pl.col("H").sum(),
+  pl.col("AB").sum()
+).with_columns(
+  (pl.col("H") / pl.col("AB")).alias("batting_avg")
+).filter(pl.col("AB") >= 10).sort("batting_avg", descending=True)
 
+display(df.head(5))
 ```
 
 
@@ -79,12 +88,16 @@ __Use the provided code above to read in the batting table. Then, with Python Po
 
 Note: A batting average is meant to measure how often a player puts the ball in play and gets to base safely. For this task, use a simplified version of batting average defined as the sum of hits (labeled 'H') divided by number of at bats (labeled 'AB').
 
-_type your results and analysis here_
+The best here is cobbty01, coming in at 36.6% batting average over his career.
 
 ```{python}
-# Include and execute your code here
+df = results.select("playerID", "H", "AB", "yearID").group_by("playerID").agg(
+  pl.col("H").sum(),
+  pl.col("AB").sum()
+).with_columns(
+  (pl.col("H") / pl.col("AB")).alias("batting_avg")
+).filter(pl.col("AB") >= 100).sort(["batting_avg", "playerID"], descending=True)
 
-
+display(df.head(5))
 ```
-
 

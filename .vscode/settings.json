@@ -7,7 +7,7 @@
   },
   "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.env.linux": {
-    "QUARTO_PYTHON": "/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/.venv/bin/python3"
+    "QUARTO_PYTHON": "/home/justin/.pyenv/versions/3.14.4/bin/python"
   },
   "python.defaultInterpreterPath": "/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/.venv/bin/python3"
 }

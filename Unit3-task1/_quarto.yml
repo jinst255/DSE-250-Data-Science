@@ -1,0 +1,5 @@
+project:
+  type: default
+
+execute:
+  python: /home/justin/.pyenv/versions/3.14.4/bin/python
