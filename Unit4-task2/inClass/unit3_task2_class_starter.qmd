@@ -1,0 +1,103 @@
+---
+title: "Client Report - Baseball Database"
+subtitle: "Unit 3 Task 2"
+author: "Justin H"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+```{python}
+import polars as pl
+import numpy as np
+import sqlite3
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+sqlite_file = 'lahmansbaseballdb.sqlite'
+conn = sqlite3.connect(sqlite_file)
+```
+
+## Load managers table
+
+Take a few minutes to load the managers table into a polars dataframe
+
+```{python}
+q = """
+    SELECT 
+      playerID, 
+      G as 'games managed', 
+      W as 'wins',
+      (CAST(W as float) / G) as 'Win %'
+    FROM managers
+"""
+managers_df = pl.read_database(q, conn)
+managers_df
+```
+
+```{python}
+q = """
+    SELECT 
+          playerID, 
+          teamID, 
+          SUM(G) as 'games managed', 
+          SUM(W) as 'wins',
+          ROUND((CAST(SUM(W) as float) / SUM(G)), 3) as 'Win %' 
+    FROM managers
+"""
+result = pl.read_database(q, conn)
+result
+
+```
+
+
+```{python}
+q = """
+    SELECT 
+          playerID, 
+          teamID, 
+          MAX(yearID) AS year,  
+          SUM(G) AS games_managed, 
+          SUM(W) AS wins,
+          SUM(L) AS losses,
+          ROUND(CAST(SUM(W) AS REAL) / NULLIF(SUM(G),0), 3) AS win_pct
+    FROM managers
+    --WHERE G > 100 -- This is a comment
+  GROUP BY playerID
+    HAVING SUM(G) > 100
+        AND MAX(yearID) > 1800
+  ORDER BY win_pct DESC
+  LIMIT 100
+
+"""
+result = pl.read_database(q, conn)
+
+with pl.Config(tbl_rows=50):
+  display(result)
+```
+
+```{python}
+sampled = result.sample(n=50, with_replacement=False, seed=42)
+display(sampled)
+```
