@@ -1,7 +1,7 @@
 ---
 title: "Client Report - Joins"
 subtitle: "Unit 3 Task 3"
-author: "[STUDENT NAME]"
+author: "Justin Hair"
 format:
   html:
     self-contained: true
@@ -40,8 +40,48 @@ LetsPlot.setup_html(isolated_frame=True)
 # Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
 
 # Include and execute your code here
-sqlite_file = 'lahmansbaseballdb.sqlite'
+sqlite_file = '/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/Unit3-task1/InClass/lahmansbaseballdb.sqlite'
 # this file must be in the same location as your .qmd or .py file
 con = sqlite3.connect(sqlite_file)
 ```
 
+
+```{python}
+q = """
+    SELECT *
+      FROM parks
+"""
+
+parks = pl.read_database(q, con)
+```
+
+
+```{python}
+q = """
+    SELECT *
+      FROM schools
+"""
+
+schools = pl.read_database(q, con)
+```
+
+
+
+```{python}
+parks.join(schools, on="city")
+```
+
+
+
+```{python}
+parks.join(schools, 
+          on=["city", "state"], 
+          # left_on=["city", "state"],
+          # right_on=["city"],
+          how="outer"
+).filter(pl.col("city") == "Seattle") 
+```
+
+```{python}
+parks.filter(pl.col("city") == "Seattle")
+```

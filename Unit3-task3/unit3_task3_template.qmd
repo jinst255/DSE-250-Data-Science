@@ -1,7 +1,7 @@
 ---
 title: "Client Report - Joins"
 subtitle: "Unit 3 Task 3"
-author: "[STUDENT NAME]"
+author: "Justin Hair"
 format:
   html:
     self-contained: true
@@ -39,7 +39,7 @@ LetsPlot.setup_html(isolated_frame=True)
 # Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html
 
 # Include and execute your code here
-sqlite_file = 'lahmansbaseballdb.sqlite'
+sqlite_file = '/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/Unit3-task1/InClass/lahmansbaseballdb.sqlite'
 # this file must be in the same location as your .qmd or .py file
 con = sqlite3.connect(sqlite_file)
 ```
@@ -48,11 +48,34 @@ con = sqlite3.connect(sqlite_file)
 
 __Write an SQL query that pulls in the the salaries table and the collegeplaying table (and any other tables you might need) and store them in polars dataframes. In Python Polars, combine the dataframes to create a list of baseball players who attended BYU-Idaho. The new table should contain five columns: playerID, schoolID, salary, yearID and teamID associated with each salary.__
 
-_type your results and analysis here_
+With these filters there are only 30 players. 
 
 ```{python}
-# Include and execute your code here
+q1 = """
+    SELECT 
+      s.playerID, 
+      s.salary,
+      s.yearID, 
+      s.teamID
+    FROM salaries AS s
+"""
 
+q2 = """
+    SELECT
+      c.playerID,
+      c.schoolID
+    FROM collegeplaying AS c
+"""
+
+salaries = pl.read_database(q1, con)
+college_playing = pl.read_database(q2, con)
+
+# display(salaries) # 4 columns
+# display(college_playing) # 1 column
+
+df = salaries.join(college_playing, on="playerID", how="inner").filter(pl.col("schoolID") == "idbyuid")
+
+display(df.head(10))
 
 ```
 
@@ -64,7 +87,37 @@ _type your results and analysis here_
 _Describe your results and analysis here_
 
 ```{python}
-# Include and execute your code here
+# I couldnt name a single team so I used AI to pick two teams. I got Los Angeles Dodgers(LAN) and New York Yankees(NYA)
+# It think it would be cool to see average salary for number of wins for both teams. (wins/salary)
+
+q1 = """
+    SELECT
+      s.teamID,
+      s.salary
+    FROM salaries AS s
+"""
+q2 = """
+    SELECT
+      t.teamID,
+      t.W
+    FROM teams AS t
+"""
+salaries = pl.read_database(q1, con)
+teams = pl.read_database(q2, con)
+
+# display(salaries)
+# display(teams)
+
+df = salaries.join(teams, on="teamID", how="inner").group_by("teamID").agg(pl.col("salary").mean().alias("avg_salary"), pl.col("W").mean().alias("avg_wins")).with_columns((pl.col("avg_wins") / pl.col("avg_salary")).alias("wins_per_salary")).filter(pl.col("teamID").is_in(["LAN", "NYA"]))
+
+display(df)
+
+
+(
+  ggplot(data=df, mapping=aes(x="avg_wins", y="avg_salary", color="teamID")) 
+  + geom_bar(stat="identity")
+)
+
 
 
 ```
