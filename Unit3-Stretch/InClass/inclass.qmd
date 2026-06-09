@@ -26,3 +26,26 @@ sqlite_file = '/home/justin/Desktop/Spring-2026/DSE-250/DSE-250-Data-Science/Uni
 # this file must be in the same location as your .qmd or .py file
 con = sqlite3.connect(sqlite_file)
 ```
+
+
+
+```{python}
+q = """
+    SELECT *
+    FROM people as p
+"""
+
+df = pl.read_database(q, con, infer_schema_length=None)
+df.head()
+```
+
+
+```{python}
+birthdays = df.select("birth_date").with_columns(pl.col("birth_date").cast(pl.Date))
+birthdays
+```
+
+
+```{python}
+
+```
