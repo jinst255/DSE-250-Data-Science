@@ -33,7 +33,11 @@ import io
 from lets_plot import *
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
-# add the additional libraries you need to import for ML here
+import polars.selectors as cs
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+
 
 LetsPlot.setup_html(isolated_frame=True)
 
@@ -45,29 +49,112 @@ LetsPlot.setup_html(isolated_frame=True)
 url = "https://github.com/byuidatascience/data4dwellings/raw/master/data-raw/dwellings_ml/dwellings_ml.csv"
 response = requests.get(url)
 df = pl.read_csv(io.BytesIO(response.content))
-df
+
 ```
 
 ## QUESTION
 
 1. __Take time to get to know your data.__ Based on some initial exploration, identify 3 variables in the dataset you think will have strong predictive ability for determining if a house was built before 1980. Explain/justify the reasoning behind your guesses (for example with plots).
 
-_type your write-up and analysis here_
+I had 50 columns to choose from.
+For the 3 I'll use:
+- livearea
+- gartype_Att
+- sprice
+I chose these becuase after a bit of research I found that homes are larger nowaday, they are way more likely to have an attached garage, and they are going to be more expensive.
+
+Upon further testing and consideration I changed my 3 to be:
+- livearea
+- finbsmnt
+- gartype 
+
+Houses are bigger nowadays. Houses nowadays have finished basements. And houses nowadays have attached garages.
+
+Upon even more testing and further consideration, I found no plausible way to train a model with an accuracy of at least 90%, only using three of the columns. That is, of course, excluding the year column itself, which would give an accuracy of 100%. I couldn't find anywhere in the assignment that said we couldn't use it, but I'm assuming we can't use it.
+In the final version I used [
+    'quality_C', 
+    'gartype_Att', 
+    'arcstyle_ONE-STORY', 
+    'livearea', 
+    'stories', 
+    'numbaths', 
+    'sprice', 
+    'basement',
+    'arcstyle_TWO-STORY', 
+    'quality_B', 
+    'finbsmnt'
+] and I got an accuracy of 92.1% with XGBoost.
+
+
 
 ```{python}
-# Optional: code you used to get to know your data
+display(df.sample(20))
 
-
+df.columns
+df.shape
 ```
 
 1. __Build a classification model labeling houses as being built “before 1980” or “during or after 1980”.__ Your goal is to reach or exceed 90% accuracy. Report your final model choice and any other model parameters you may have tweaked (train-test split ratio, tuning parameters, etc).  
 
-_type your write-up and analysis here_
+RandomForest can get up to about 87.2% accuracy using 'livearea', 'basement', and 'arcstyle_ONE-STORY'
+But XGBoost takes the cake when you give it more then 3 inputs. You get an accuracy of 92.1% with 11 columns. 
+Interesting note but when you give XGBoost only 3 columns it only gets 85.6% accuracy. 
+In summary, XGBoost beats RandomForest when given 11 inputs by 0.1% in accuracy, but RandomForest beats XGBoost when given only 3 inputs by 6.5% in accuracy.
+
 
 ```{python}
-# Include and execute your code here
-# Don't forget, you need another import statement to import the desired ML model from sklearn
+from sklearn.ensemble import RandomForestClassifier
 
+feature_columns = ['livearea', 'basement', 'arcstyle_ONE-STORY'] 
 
+x = df.select(feature_columns).to_numpy()
+y = df.select('before1980').to_numpy().ravel()
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
+model = RandomForestClassifier(
+    n_estimators=2000,
+    random_state=42,
+    n_jobs=-1
+)
+
+model.fit(x_train, y_train)
+print("Accuracy:", accuracy_score(y_test, model.predict(x_test)))
 ```
 
+
+
+```{python}
+from xgboost import XGBClassifier
+
+# feature_columns = ['quality_C', 'gartype_Att', 'arcstyle_ONE-STORY'] # Best with only 3 columns: 85.62%
+# feature_columns = ['quality_C', 'gartype_Att', 'arcstyle_ONE-STORY', 'livearea', 'stories', 'numbaths', 'sprice', 'basement'] # 0.9153392974034475
+feature_columns = [
+    'quality_C', 
+    'gartype_Att', 
+    'arcstyle_ONE-STORY', 
+    'livearea', 
+    'stories', 
+    'numbaths', 
+    'sprice', 
+    'basement',
+    'arcstyle_TWO-STORY', 
+    'quality_B', 
+    'finbsmnt'
+] # 0.921012437268165
+
+
+x = df.select(feature_columns).to_numpy()
+y = df.select('before1980').to_numpy().ravel()
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
+model = XGBClassifier(
+    n_estimators=275,
+    random_state=42,
+)
+
+model.fit(x_train, y_train)
+print("Accuracy:", accuracy_score(y_test, model.predict(x_test)))
+
+```
