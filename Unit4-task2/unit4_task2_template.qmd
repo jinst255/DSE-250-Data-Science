@@ -31,6 +31,8 @@ import numpy as np
 from lets_plot import *
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
+import requests
+import io
 # add the additional libraries you need to import for ML here
 
 LetsPlot.setup_html(isolated_frame=True)
@@ -38,23 +40,71 @@ LetsPlot.setup_html(isolated_frame=True)
 
 
 ```{python}
-url = "https://raw.githubusercontent.com/byuidatascience/data4missing/master/data-raw/flights_missing/flights_missing.json"
+url = "https://github.com/byuidatascience/data4dwellings/raw/master/data-raw/dwellings_ml/dwellings_ml.csv"
 
 response = requests.get(url)
 
-df = pl.read_json(io.BytesIO(response.content))
+df = pl.read_csv(io.BytesIO(response.content))
 df
 ```
+
+
+```{python}
+# Loading in the model to get evaluation metrics
+# I copied this code from the past assignent.
+from xgboost import XGBClassifier
+
+# feature_columns = ['quality_C', 'gartype_Att', 'arcstyle_ONE-STORY'] # Best with only 3 columns: 85.62%
+# feature_columns = ['quality_C', 'gartype_Att', 'arcstyle_ONE-STORY', 'livearea', 'stories', 'numbaths', 'sprice', 'basement'] # 0.9153392974034475
+feature_columns = [
+    'quality_C', 
+    'gartype_Att', 
+    'arcstyle_ONE-STORY', 
+    'livearea', 
+    'stories', 
+    'numbaths', 
+    'sprice', 
+    'basement',
+    'arcstyle_TWO-STORY', 
+    'quality_B', 
+    'finbsmnt'
+] # 0.921012437268165
+
+
+x = df.select(feature_columns).to_numpy()
+y = df.select('before1980').to_numpy().ravel()
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
+my_classifier = XGBClassifier(
+    n_estimators=275,
+    random_state=42,
+)
+
+my_classifier.fit(x_train, y_train)
+pred = my_classifier.predict(x_test)
+```
+
 
 ## QUESTION 1
 
 1. __Describe the quality of your classification model using 2-3 different evaluation metrics.__ You also need to explain how to define/interpret each of the evaluation metrics you use.  
 
-_type your write-up and analysis here_
+My model had an accuracy of 92.1%, a precision of 93.5%, and a recall of 93.9%. Not bad.
+For understanding these metrics:
+- Accuracy is how many of all the predictions were correct.
+- Precision is how many of the predicted positives were actually positive.
+- Recall is how many of the actual positives were correctly predicted as positive.
 
 ```{python}
-# Include and execute your code here
-# Don't forget, you need another import statement to import the desired ML model from sklearn
+from sklearn.metrics import confusion_matrix
+
+# print("Predicted 0 | Predicted 1") 
+# print(confusion_matrix(y_test, pred)) 
+
+print("Accuracy:", metrics.accuracy_score(y_test, pred))
+print("Precision:", metrics.precision_score(y_test, pred))
+print("Recall:", metrics.recall_score(y_test, pred))
 
 ```
 
@@ -63,22 +113,133 @@ _type your write-up and analysis here_
 
 1. __Justify your classification model by discussing the most important features selected by your model.__ This discussion should include a plot of permutation importance values for the most important features. Were there any features you thought would be importance but weren't?
 
-_type your write-up and analysis here_
+The most important features in my model were arcstyle_ONE-STORY, quality_C, and gartype_Att. 
+
+On the last homework assignment I tested many single features. I found that biggest impactor was livearea. But run together, the most important turns out to be arcstyle_ONE-STORY. 
+Personally I thought that something to do with the car spaces would be really important. But it turns out that it wasnt. 
 
 ```{python}
-# Include and execute your code here
+feature_importances = pl.DataFrame({
+    "importance": my_classifier.feature_importances_,
+    "vars": feature_columns
+})
+with pl.Config(tbl_rows=-1):
+    print(feature_importances.sort("importance", descending=True))
 
 
+from sklearn.inspection import permutation_importance
+
+perm = permutation_importance(my_classifier, x_test, y_test, n_repeats=10, random_state=42)
+
+perm_df = pl.DataFrame({
+    "feature": feature_columns,
+    "perm_importance": perm.importances_mean,
+}).sort("perm_importance")
+
+with pl.Config(tbl_rows=-1):
+    print(perm_df)
+
+(
+    ggplot(perm_df, aes(x="perm_importance", y="feature"))
+    + geom_bar(stat="identity")
+    + labs(
+        title="Permutation Feature Importances",
+        x="Mean Accuracy Decrease",
+        y="") # Its doesnt look quite right with "feature" so I'm making it blank
+    
+    + theme_minimal()
+)
 ```
+
 
 ## QUESTION 3
 
 1. __For the 3 most important features, explain their relationship to the target variable. Use a plot to illustrate the relationship.__ (3 plots minimum)
 
-_type your write-up and analysis here_
+One-story homes are mostly pre-1980.
+C-quality homes are more then half pre-1980
+Attached garage homes are more a pre-1980 thing.
+
+
+
 
 ```{python}
-# Include and execute your code here
+
+# I need to create a new column that labels thats yes or no bassed off of if my feature is a 1 or 0
+graph1 = (
+    df.group_by("arcstyle_ONE-STORY")
+    .agg(pl.col("before1980").mean().alias("pct"))
+    .sort("arcstyle_ONE-STORY")
+    .with_columns(
+        pl.when(pl.col("arcstyle_ONE-STORY") == 1)
+          .then(pl.lit("Yes"))
+          .otherwise(pl.lit("No"))
+          .alias("label")
+    )
+)
+
+display(
+    ggplot(graph1, aes(x="label", y="pct"))
+    + geom_bar(stat="identity")
+    + scale_y_continuous(limits=[0, 1])
+    + labs(
+           x="Is One-Story", 
+           y="Proportion Pre-1980"
+           )
+
+    + theme_minimal()
+)
+
+# Graph 2
+graph2 = (
+    df.group_by("quality_C")
+    .agg(pl.col("before1980").mean().alias("pct"))
+    .sort("quality_C")
+    .with_columns(
+        pl.when(pl.col("quality_C") == 1)
+          .then(pl.lit("Yes"))
+          .otherwise(pl.lit("No"))
+          .alias("label")
+    )
+)
+
+display(
+    ggplot(graph2, aes(x="label", y="pct"))
+    + geom_bar(stat="identity")
+    + scale_y_continuous(limits=[0, 1])
+    + labs(
+           x="Is Quality C", 
+           y="Proportion Pre-1980"
+           )
+
+    + theme_minimal()
+)
+
+
+# Graph 3
+graph3 = (
+    df.group_by("gartype_Att")
+    .agg(pl.col("before1980").mean().alias("pct"))
+    .sort("gartype_Att")
+    .with_columns(
+        pl.when(pl.col("gartype_Att") == 1)
+          .then(pl.lit("Yes"))
+          .otherwise(pl.lit("No"))
+          .alias("label")
+    )
+)
+
+display(
+    ggplot(graph3, aes(x="label", y="pct"))
+    + geom_bar(stat="identity")
+    + scale_y_continuous(limits=[0, 1])
+    + labs(
+           x="Is Attached Garage", 
+           y="Proportion Pre-1980"
+           )
+
+    + theme_minimal()
+)
 
 
 ```
