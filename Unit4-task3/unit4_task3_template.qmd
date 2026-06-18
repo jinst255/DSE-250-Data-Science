@@ -1,7 +1,7 @@
 ---
 title: "Client Report - Show me!"
 subtitle: "Unit 4 Task 3"
-author: "[STUDENT NAME]"
+author: "Justin Hair"
 format:
   html:
     self-contained: true
@@ -39,7 +39,9 @@ LetsPlot.setup_html(isolated_frame=True)
 
 ```{python}
 # import your data here using polars and the URL
+url = "https://github.com/byuidatascience/data4dwellings/raw/master/data-raw/dwellings_ml/dwellings_ml.csv"
 
+df = pl.read_csv(url)
 
 ```
 
@@ -47,23 +49,146 @@ LetsPlot.setup_html(isolated_frame=True)
 
 1. __Repeat the classification exercise using 2 different algorithms/models. Explain the differences between the 3 models__ (your original one, and the 2 new ones for this task).
 
-_type your write-up and analysis here_
+After I did some reasearch I decieded to use XGboost as my main model in the past assingment.
+So here are the 3 models I will be using for this task:
+- XGboost
+- Decision Tree
+- Random Forest
+
+The difference is found in how they make their predictions. 
+
+Decision Tree: 1 tree. Its like those simple diagrams. Take this example:
+Should I use duck tape or WD-40 to fix this?
+Does it move? > Should it? if yes, use WD-40. If no, use duck tape.
+
+Random Forest: 
+Instead of just using 1 tree, it uses several and each votes. Majoraty wins.
+
+XGBoost: 
+Think of it as trees stacked on trees. Its the slowest but most accurate. 
+
 
 ```{python}
-# Include and execute your code here
+
+# Prep the ML data
+feature_columns = [
+    'quality_C', 
+    'gartype_Att', 
+    'arcstyle_ONE-STORY', 
+    'livearea', 
+    'stories', 
+    'numbaths', 
+    'sprice', 
+    'basement',
+    'arcstyle_TWO-STORY', 
+    'quality_B', 
+    'finbsmnt'
+]
+
+x = df.select(feature_columns).to_numpy()
+y = df.select('before1980').to_numpy().ravel()
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
+
+
+# Import the 3 models and train them
+
+# Model 1: XGBoost Classifier
+from xgboost import XGBClassifier
+my_classifier1 = XGBClassifier(random_state=42)
+my_classifier1.fit(x_train, y_train)
+pred1 = my_classifier1.predict(x_test)
+
+# Model 2: Decision Tree Classifier
+from sklearn.tree import DecisionTreeClassifier
+my_classifier2 = DecisionTreeClassifier(random_state=42)
+my_classifier2.fit(x_train, y_train)
+pred2 = my_classifier2.predict(x_test)
+
+# Model 3: Random Forest Classifier
+from sklearn.ensemble import RandomForestClassifier
+my_classifier3 = RandomForestClassifier(random_state=42)
+my_classifier3.fit(x_train, y_train)
+pred3 = my_classifier3.predict(x_test)
+
+
+
+# Compare models
+from sklearn.metrics import confusion_matrix
+
+print("Model 1 - XGBoost Classifier (The original one I used)")
+print("Accuracy:", metrics.accuracy_score(y_test, pred1))
+print("Precision:", metrics.precision_score(y_test, pred1))
+print("Recall:", metrics.recall_score(y_test, pred1))
+
+print("\nModel 2 - Decision Tree Classifier")
+print("Accuracy:", metrics.accuracy_score(y_test, pred2))
+print("Precision:", metrics.precision_score(y_test, pred2))
+print("Recall:", metrics.recall_score(y_test, pred2))
+
+print("\nModel 3 - Random Forest Classifier")
+print("Accuracy:", metrics.accuracy_score(y_test, pred3))
+print("Precision:", metrics.precision_score(y_test, pred3))
+print("Recall:", metrics.recall_score(y_test, pred3))
+
 
 
 ```
+
+
 
 
 ## QUESTION 2
 
 1. For each model (your original one, and the 2 new ones for this task), display the classification report and the permutation importances for the most important features.  Discuss which model you would recommend to the Client and why.
 
-_type your write-up and analysis here_
+Since we are only using 11 features, I would recomend using XGboost. Take a look at the scores: 
+- XGboost: 92% accuracy
+- Decision Tree: 89% accuracy
+- Random Forest: 92% accuracy
+
+
 
 ```{python}
-# Include and execute your code here
+from sklearn.inspection import permutation_importance
+
+# ----- Model 1: XGBoost -----
+print("===== XGBoost =====")
+print(metrics.classification_report(y_test, pred1))
+
+result1 = permutation_importance(my_classifier1, x_test, y_test, n_repeats=10, random_state=42)
+importance1 = pl.DataFrame({
+    "feature": feature_columns,
+    "importance": result1.importances_mean,
+}).sort("importance", descending=True)
+print(importance1)
+
+
+
+# ----- Model 2: Decision Tree -----
+print("===== Decision Tree =====")
+print(metrics.classification_report(y_test, pred2))
+
+result2 = permutation_importance(my_classifier2, x_test, y_test, n_repeats=10, random_state=42)
+importance2 = pl.DataFrame({
+    "feature": feature_columns,
+    "importance": result2.importances_mean,
+}).sort("importance", descending=True)
+print(importance2)
+
+
+
+# ----- Model 3: Random Forest -----
+print("===== Random Forest =====")
+print(metrics.classification_report(y_test, pred3))
+
+result3 = permutation_importance(my_classifier3, x_test, y_test, n_repeats=10, random_state=42)
+importance3 = pl.DataFrame({
+    "feature": feature_columns,
+    "importance": result3.importances_mean,
+}).sort("importance", descending=True)
+print(importance3)
 
 
 ```
