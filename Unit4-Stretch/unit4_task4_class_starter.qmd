@@ -1,0 +1,85 @@
+---
+title: "Machine Learning with Flights Primer"
+format: html
+---
+
+__NOTE:__ This file departs from best practice of importing all the libraries at the top of the document. Instead, the libraries are imported as they are needed in this file. This is so that you can see what commands are coming from that library.
+
+```{python}
+import sklearn
+import polars as pl
+import numpy as np
+import requests #for reading in JSON
+import io       #for reading in JSON
+from lets_plot import *
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+url = "https://raw.githubusercontent.com/byuidatascience/data4missing/master/data-raw/flights_missing/flights_missing.json"
+
+response = requests.get(url)
+
+df = pl.read_json(io.BytesIO(response.content))
+```
+
+## Prep the data
+
+```{python}
+import polars.selectors as cs
+
+df_missing = df.with_columns(
+                 pl.col('month').replace("n/a", None)
+                ,pl.col('num_of_delays_carrier').replace('1500+', 1500).cast(pl.Int64)
+                ,cs.numeric().replace(-999, None)
+)
+```
+
+
+```{python}
+
+df_cleaned = df_missing.with_columns(cs.numeric().fill_null(strategy = 'mean'))
+df_cleaned
+```
+
+## Partition the data
+
+
+```{python}
+
+# This is what we are trying to predict
+y = df_cleaned.select('minutes_delayed_total')
+
+# drop the strings and y
+x = df_cleaned.drop(['minutes_delayed_total', 'airport_code', 'airport_name', 'month'])
+
+```
+
+
+```{python}
+
+# Split the data for training and testing accuracy
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=77)
+```
+
+```{python}
+from sklearn.ensemble import RandomForestRegressor
+
+regressor = RandomForestRegressor()
+
+regressor.fit(x_train, y_train)
+
+pred = regressor.predict(x_test)
+```
+
+```{python}
+from sklearn.metrics import mean_absolute_error, mean_squared_error, root_mean_squared_error, r2_score
+
+print("Mean Absolute Error:", mean_absolute_error(y_test, pred))
+print("Mean Squared Error:", mean_squared_error(y_test, pred))
+print("Root Mean Squared Error:", root_mean_squared_error(y_test, pred))
+print("R-squared:", r2_score(y_test, pred))
+```
