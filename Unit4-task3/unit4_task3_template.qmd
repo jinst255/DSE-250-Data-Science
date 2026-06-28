@@ -42,7 +42,7 @@ LetsPlot.setup_html(isolated_frame=True)
 url = "https://github.com/byuidatascience/data4dwellings/raw/master/data-raw/dwellings_ml/dwellings_ml.csv"
 
 df = pl.read_csv(url)
-
+df
 ```
 
 ## QUESTION 1

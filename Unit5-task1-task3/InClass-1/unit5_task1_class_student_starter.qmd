@@ -1,0 +1,66 @@
+---
+title: "Unit 5 Class 1: Regex"
+format: html
+---
+
+```{python}
+import polars as pl 
+import numpy as np
+from lets_plot import *
+# add the additional libraries you need to import for ML here
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+A regular expression (or "regex") is a specialized syntax used to define a search pattern for strings. Polars commands use regular expression: they perform an action when the expression matches what is in your text string. The regular expression can include literal characters or metacharacters. Example of metcharacters would be "any digit", or "any whitespace", or "a capital letter", and so on.
+
+Think of regex as a concise, declarative language for pattern matching that saves you from writing complex, nested loops and conditional logic.
+
+We will use this small and simple data set of names and phone numbers to practice using regular expressions in polars.
+
+```{python}
+phone = pl.DataFrame({
+    'name': [' Fay Ken Data', 'Fay k Data ', 'Fay K. Data.', "Fay K D'Ata", ' Fay Data ', 'Fay Kent Data'],
+    'ph'  : ['1234567890', '123 456 7890', '123-456-7890', '123.456.7890', '(123)456-7890', '+1 123 4567890']
+})
+```
+
+First, let's try to split the names so that we can capture the first, last, and middle names all in separate variables. Then, we will do a similar exercise and try to parse the phone numbers into an area code, next 3 digits, and the last 4 digits.
+
+
+
+```{python}
+phone
+
+```
+
+```{python}
+# Remove and " " from the start and end of string in the name column
+phone_1 = phone.with_columns(pl.col('name').str.strip_chars())
+
+# Reomve and "." and "'" from the name column
+phone_1 = phone_1.with_columns(pl.col('name').str.replace_all(r"\.|\'", "").str.to_titlecase())
+
+phone_1
+```
+
+```{python}
+phone.with_columns(
+    pl.col("name").str.strip_chars()
+).with_columns(
+    pl.col("name").str.extract(r"^(\S+)\s").alias("first"),
+    pl.col("name").str.extract(r"(\S+)$").str.replace_all(r"'|\.", "").str.to_titlecase().alias("last")
+)
+```
+
+
+# numbers
+
+area code, first 3 digits, last 4
+```{python}
+phone.with_columns(
+    # pl.col("ph").str.replace_all(r"\D", "")
+    pl.col("ph").str.replace_all(r"-|\(|\)|\s|\.|\+", "")
+)
+```
+
