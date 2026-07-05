@@ -1,0 +1,72 @@
+---
+title: "Unit 5 Day 2 Class Code"
+format: html
+---
+
+
+```{python}
+import polars as pl 
+import numpy as np
+from lets_plot import *
+import polars.selectors as cs
+# add the additional libraries you need to import for ML here
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# Read in star wars data:
+df = pl.read_csv('https://byuidatascience.github.io/DS250-Course-Polars/Data/StarWars_with_emails.csv', skip_lines=10) #in this case skip_lines does the same
+```
+
+```{python}
+df = df.filter((pl.col('Household Income') != 'Response') | (pl.col('Household Income').is_null()))
+df
+```
+```{python}
+# Get counts of the number range variables:
+display(df.group_by('Household Income').agg(pl.len()))
+display(df.group_by('Age').agg(pl.len()))
+```
+
+### How would you convert this?
+
+```{python}
+df.with_columns(
+    pl.col('Household Income').str.replace_all(r',', '')
+    .str.extract(r'^\$([\d,]+)').cast(pl.Int64).alias('income')
+).group_by('income').agg(pl.len())
+```
+
+## Ordinal categories
+
+```{python}
+with pl.Config(tbl_width_chars=1000):
+    display(df.group_by('Education').agg(pl.len()))
+```
+
+```{python}
+df.with_columns(pl.col('Education').replace_strict(
+    {
+        "Less than high school degree": 1,
+        "High school degree": 2,
+        "Some college or Associate degr": 3,
+        "Bachelor degree": 4,
+        "Graduate degree": 5
+    }, default=0
+)).group_by('Education').agg(pl.len())
+```
+
+## Let’s look at favorability rating. 
+
+```{python}
+df.group_by('Gender').agg(pl.len())
+```
+
+## One Hot encoding with to_dummies()
+
+```{python}
+display(df.select('Gender'))
+df.to_dummies('Gender').select(pl.col(r'^Gender.*$'))
+```
+

@@ -30,7 +30,6 @@ import polars as pl
 import numpy as np
 from lets_plot import *
 import polars.selectors as cs
-# add the additional libraries you need to import for ML here
 
 LetsPlot.setup_html(isolated_frame=True)
 
@@ -99,14 +98,15 @@ df = pl.read_csv(data_url, skip_rows=12, has_header=False, new_columns = new_nam
 ```
 
 
+
+
 # Task 1 (regex)
 
 ```{python}
-display(df.schema)
+# display(df.schema)
 ```
 
 ```{python}
-
 # here I created first and last name as well as the email domain
 df_new = df.with_columns(
   pl.col("email").str.extract(r"^([a-zA-Z]+)", 1).str.strip_chars().alias("first_name"),
@@ -114,7 +114,7 @@ df_new = df.with_columns(
   pl.col("email").str.extract(r"@(.+)$", 1).str.to_lowercase().str.strip_chars().alias("email_domain")
 )
 
-df_new
+# df_new 
 ```
 
 
@@ -125,13 +125,100 @@ df_new.group_by("email_domain").len().sort("len", descending=True)
 # 286 myorg
 # 193 yahoo
 
+df = df_new
 ```
 
-# Task 2 (Visualization)
+# Task 2 (Data cleaning & prep for ML)
+
+```{python}
+# age to int
+df_ml = df_new.filter(pl.any_horizontal(pl.col(r"^seen_Episode.*$").is_not_null()))
+
+
+# print(df_ml.shape)
+
+df_ml1 = df_ml.with_columns(
+  pl.col('age').str.extract(r"(\d+)", 1).cast(pl.Int32).alias("age_int")
+).drop('age')
+
+```
+
+```{python}
+# education to int
+df_ml2 = df_ml1.with_columns(
+    pl.col("education").replace_strict({
+        "Less than high school degree": 1,
+        "High school degree": 2,
+        "Some college or Associate degree": 3,
+        "Bachelor degree": 4,
+        "Graduate degree": 5
+    }).alias("education_int")
+).drop("education")
+```
+
+```{python}
+df_ml3 = df_ml2.with_columns(
+    pl.col("household_income").str.replace_all(r",", "").str.extract(r"^\$([\d]+)", 1).cast(pl.Int32).alias("income_int")
+).drop("household_income")
+
+# df_ml3['income_int']
+```
+
+```{python}
+# df_ml3.group_by("fav_Han_Solo").agg(pl.len())
+
+df = df_ml3.with_columns(
+    cs.starts_with("fav_").replace_strict({
+        "Very unfavorably": 1,
+        "Somewhat unfavorably": 2,
+        "Neither favorably nor unfavorably (neutral)": 3,
+        "Somewhat favorably": 4,
+        "Very favorably": 5,
+        "Unfamiliar (N/A)": 0
+    })
+)
+
+```
+
 
 # Task 3 (ML)
 
+```{python}
+# Include and execute your code here
+df = df.filter(pl.any_horizontal(pl.col(r"^seen_Episode.*$").is_not_null()))
 
+```
+
+```{python}
+df = df.with_columns(
+    (pl.col("income_int") >= 50000).cast(pl.Int8).alias("high_income")
+).drop_nulls("high_income")
+```
+
+```{python}
+# drop columns that we arent training on
+#df.drop(['respondentid', 'email', 'first_name', 'last_name'])# .to_dummies('domain').head(5)
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+
+# drop strings and target column
+x = df.select(cs.numeric()).drop(["respondentid", "income_int", "high_income"]).to_numpy()
+
+
+y = df.select("high_income").to_numpy().ravel()
+
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42) 
+
+clf = DecisionTreeClassifier()  
+clf.fit(X_train, y_train) 
+pred = clf.predict(X_test) 
+
+```
+
+```{python}
+from sklearn.metrics import classification_report
+print(classification_report(y_test, pred))
+```
 
 
 
@@ -140,37 +227,30 @@ df_new.group_by("email_domain").len().sort("len", descending=True)
 <!-- Rather than a simple write up like we have been doing so far, this project requires a more structured approach. You will need to show you have completed the tasks, but will structure the report in a way that is more like a client report. The report will be structured as follows:
 
  - Executive Summary: This is a high level overview of the analysis, including the problem statement, the data used, and the main findings. It should be concise and to the point, summarizing the key insights/recommendations without going into too much detail. These are usually bullet points, no graphs. PLEASE EXPLICITLY STATE IN THIS SECTION WHETHER YOU DID THE STRETCH OR NOT! 
- - Methods: this is a high level overview of the methods used in the analysis. This should include an explanation of data preparation steps, especially how you dealt with each categorical variable and why. Showing the resulting or original distribution of variables may be helpful. Describe how you handled missing values and outliers. How did/might your decisions impact results?Explain any feature engineering steps you took. This is also where you will put the graphs you recreated to show you validated the dataset and that it matches the article.
+ - Methods: this is a high level overview of the methods used in the analysis. This should include an explanation of data preparation steps, especially how you dealt with each categorical variable and why. Showing the resulting or original distribution of variables may be helpful. Describe how you handled missing values and outliers. How did/might your decisions impact results? Explain any feature engineering steps you took. This is also where you will put the graphs you recreated to show you validated the dataset and that it matches the article.
  - Results: this is a more in-depth explanation of results. A classification report and feature importance graphs belong here.
  - Conclusion: this is where you will discuss the implication of the results, including any limitations of the analysis, and recommendations for actions/future work. It may feel repetitive to the executive summary, but it should be more detailed and include any additional insights you gained from the analysis. -->
 
 
 ## Executive Summary
 
-_type your write-up and analysis here_
+I went through the provided Star Wars survey data and created a cleaned dataframe that I used to build a classification model to predict if any given person in the data made more then $50K a year. 
 
-
+I have not yet done the stretch task.
 
 ## Methods
 
-_type your report here, you will likely want multiple code chunks and text intermingled_
+I used regular expressions to create a first, last names column and also to extract the email domain from the email column. After regex I filtered the data to those who had seen at least 1 of the Star Wars movies. After that I preped the data for ML by converting what string I should to numeric values. After that I dropped rows with nulls and columns with strings. Then I trained a decision tree classifier and printed out its report.
 
-```{python}
-# Include and execute your code here
-
-
-```
 
 ## Results
 
-_type your report here, you will likely want multiple code chunks and text intermingled_
+The ML model got 63% accuracy on the test set. 
 
 ```{python}
-# Include and execute your code here
-
-
+print(classification_report(y_test, pred))
 ```
 
-## Results
+## Conclusion 
 
-_type your report here_
+With the given data I was able to create a model that could predict if someone makes more then $50K a year with 63% accuracy. Thats only 13% accuracy over guessing, so I learned that predicting income based on if someone likes Star Wars isnt a great way to do it. 

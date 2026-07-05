@@ -1,0 +1,76 @@
+---
+title: "Unit 5 Day 2 Class Code"
+format: html
+---
+
+
+```{python}
+import polars as pl 
+import numpy as np
+from lets_plot import *
+import polars.selectors as cs
+# add the additional libraries you need to import for ML here
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# Read in star wars data:
+df = pl.read_csv('https://byuidatascience.github.io/DS250-Course-Polars/Data/StarWars_with_emails.csv', skip_rows=10) #in this case skip_lines does the same
+```
+
+```{python}
+df = df.filter((pl.col('Household Income') != 'Response') | (pl.col('Household Income').is_null()))
+```
+
+```{python}
+# Get counts of the number range variables:
+display(df.group_by('Household Income').agg(pl.len()))
+display(df.group_by('Age').agg(pl.len()))
+```
+
+### How would you convert this?
+
+```{python}
+new_df = df.with_columns(pl.col(
+    'Household Income').str.replace_all(r',', '').str.extract(r'^\$([\d,]+)').cast(pl.Int32).alias('income')
+).group_by('income').agg(pl.len())
+
+# new_df['income'].max() # the max value is 150,000
+# So I could cast it to a int32
+```
+
+## Ordinal categories
+
+```{python}
+with pl.Config(tbl_width_chars=100):
+    display(df.group_by('Education').agg(pl.len()))
+```
+
+```{python}
+df.with_columns(pl.col('Education').replace_strict(
+    {
+        "Less than high school degree": 1,
+        "High school degree": 2,
+        "Some college or Associate degree": 3,
+        "Bachelor degree": 4,
+        "Graduate degree": 5
+    }
+)).group_by('Education').agg(pl.len())
+
+```
+
+## Let’s look at favorability rating. 
+
+```{python}
+df.group_by('Please state whether you view the following characters favorably, unfavorably, or are unfamiliar with him/her.').agg(pl.len())
+```
+
+```{python}
+df.to_dummies('Gender').agg(pl.len()) # there were only 3 options in gender, male, female, and null. This will create 3 columns.
+```
+
+```{python}
+display(df.select('Gender'))
+df.to_dummies('Gender').select(pl.col(r'^Gender.*$'))
+```

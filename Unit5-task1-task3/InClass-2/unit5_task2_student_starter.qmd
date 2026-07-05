@@ -1,0 +1,85 @@
+---
+title: "Student Starter File: Filtering for nulls over multiple columns"
+format: html
+---
+
+```{python}
+import polars as pl 
+import numpy as np
+from lets_plot import *
+import polars.selectors as cs
+# add the additional libraries you need to import for ML here
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+This data was collected in a survey. Respondents were asked to specify "all that apply" and given a list of whether they have a pet, like to travel, like movies, or like books.
+
+```{python}
+
+prefs = pl.DataFrame(
+    {
+        "has_pet": [True, False, True, False, True],
+        "likes_travel": [False, False, False, False, True],
+        "likes_movies": [True, False, True, False, True],
+        "likes_books": [False, False, True, True, True],
+        "likes_books": [False, False, True, True, True],
+    }
+)
+
+```
+
+Using information at these links:
+https://learning.oreilly.com/library/view/python-polars-the/9781098156077/ch08.html#tbl-expressions-element-missing
+
+https://learning.oreilly.com/library/view/python-polars-the/9781098156077/ch09.html#id115
+
+Can you get these results?
+
+1. Return rows that contain at least one 'True'
+
+```{python}
+
+```
+
+2. Return rows that have ALL True values
+
+```{python}
+
+```
+
+Now use this updated dataset. The first two values in the "likes_books" column have been changed from False to None (i.e. made into missing values). An 'id' column has also been added for convenience in checking answers.
+
+```{python}
+# Imagine this dataset was created with a "check all that apply" question
+prefs2 = pl.DataFrame(
+    {
+        "id": [1, 2, 3, 4, 5],
+        "has_pet": [True, False, True, False, True],
+        "likes_travel": [False, False, False, False, True],
+        "likes_movies": [True, False, True, False, True],
+        "likes_books": [None, None, True, True, True],
+    }
+)
+
+```
+
+Can you get these results?
+
+3. Return rows that contain any missing values (null) in it
+
+```{python}
+
+```
+
+4. Return rows that have have no missing values
+
+```{python}
+
+```
+
+5. Return rows that have any valid values, or in other words, at least 1 non-missing value
+
+```{python}
+
+```
