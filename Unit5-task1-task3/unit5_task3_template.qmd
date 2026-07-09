@@ -126,6 +126,7 @@ df_new.group_by("email_domain").len().sort("len", descending=True)
 # 193 yahoo
 
 df = df_new
+df_nonML = df
 ```
 
 # Task 2 (Data cleaning & prep for ML)
@@ -186,7 +187,6 @@ df = df_ml3.with_columns(
 ```{python}
 # Include and execute your code here
 df = df.filter(pl.any_horizontal(pl.col(r"^seen_Episode.*$").is_not_null()))
-
 ```
 
 ```{python}
@@ -254,3 +254,31 @@ print(classification_report(y_test, pred))
 ## Conclusion 
 
 With the given data I was able to create a model that could predict if someone makes more then $50K a year with 63% accuracy. Thats only 13% accuracy over guessing, so I learned that predicting income based on if someone likes Star Wars isnt a great way to do it. 
+
+
+
+
+
+
+
+
+# Info for the stretch task
+
+The idea is that this dataset came from online. The team that got the data also published some numbers on it. The team published a report and it has some graphs. For the stretch task is I'll pick 2 of those graphs and then recreate them to verify the data to see if their number match the data they provided. 
+
+
+## The prep we did in class (July 7th)
+
+```{python}
+display(
+  ggplot(df_nonML, aes(x = 'age'))
+  + geom_bar()
+  + facet_wrap(facets='gender')
+  + labs(title="Who watches Star Wars Movies?", subtitle="Of the 835 respondents who haves seent the films")
+  + theme_classic()
+  + theme(
+      title=element_text(face='bold', size=18),
+      plot_subtitle=element_text(face='plain', size=12)
+  )
+)
+```
