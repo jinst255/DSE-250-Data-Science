@@ -1,0 +1,203 @@
+---
+title: "Quiz"
+author: "Justin Hair"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute: 
+  warning: false
+    
+---
+
+
+
+plot the data column from OR and UT (oregon and utah)
+ggplot plot it
+
+# Q1 - Recreate the image with the names data
+
+```{python}
+# import libraries
+import polars as pl
+import numpy as np
+from lets_plot import *
+import polars.selectors as cs
+
+LetsPlot.setup_html(isolated_frame=True)
+```
+
+```{python}
+# imported dataframe as df
+df = pl.read_csv("names_year_csv.csv")
+```
+
+```{python}
+# prep df
+df = df.filter(pl.col("name") == "John").select('name', 'year', 'OR', 'UT')
+```
+
+```{python}
+# ggplot it
+
+"""
+# Todo list
+- [x] set title to "The history of John for Utah (red) and Oregon (orange)"
+- [x] set y axis to "Count of John"
+- [x] set x asis to "Year name given"
+- [x] draw a virtical line at year 1936, 1976, and 1999
+- [ ] add text to the virtical lines with the year
+- [ ] remove "," from the y axis
+"""
+
+display(
+    ggplot(df.to_pandas(), aes(x='year', y='OR', color='name')) 
+    + geom_line(aes(y='OR'), color='orange')
+    + geom_line(aes(y='UT'), color='red') 
+    + geom_vline(xintercept=1936, color = "black")
+    + geom_vline(xintercept=1976, color = "black")
+    + geom_vline(xintercept=1999, color = "black")
+
+    + labs(title="The history of John for Utah (red) and Oregon (orange)", x="Year", y="Count of John")
+)
+
+```
+
+
+
+# Q2 - Calculate the standard deviation of the data series (with the function std() ) after replacing the missing values with the median
+
+
+```{python}
+"""
+Todo list
+- [x] set 'missing' and 'N/A' to null
+- [x] cast to int
+- [x] replace missing values with median using median() and also 
+- [x] calculate standard deviation
+- [x] display result to 2 decimal
+
+"""
+problem = pl.Series(['N/A', 18, 22, 45, 31, 'missing', 85, 38, 129, 8000, 22, 2], strict=False)
+
+
+
+# set 'missing' and 'N/A' to null
+problem = problem.replace(['missing', 'N/A'], None)
+
+# cast to int
+problem = problem.cast(pl.Int64)
+
+# replace missing values with median
+problem = problem.fill_null(problem.median())
+
+print(f"Standard Deviation: {problem.std():.2f}")
+
+```
+
+
+
+# Q3 - Use this star wars data for this question. For each gender, calculate the proportion of respondents that have a "Very favorably" view of Princess Leia Organa. Report the proportions below, then show the two proportions in a bar graph. 
+
+
+```{python}
+"""
+Todo list
+- [x] import df
+- [x] create df with gender, "character_feeling__PrincessLeiaOrgana" columns
+- [x] clean data? (remove rows with nulls)
+- [x] caluclate porportions of "Very favorably" for each gender
+- [x] ggplot it
+"""
+
+
+# Read in star wars data:
+df = pl.read_csv('https://github.com/byuidatascience/data_fivethirtyeight_starwars/raw/master/survey_wide_all.csv')
+
+# df
+```
+
+
+```{python}
+# create df with gender, character_feeling__PrincessLeiaOrgana columns
+df = df.select(['gender', 'character_feeling__PrincessLeiaOrgana'])
+# df
+```
+
+
+```{python}
+df.select(pl.col('gender').null_count())
+df.select(pl.col('character_feeling__PrincessLeiaOrgana').null_count())
+
+# there are 0 so I dont need to clean the data.
+
+
+# never mind, turns out that there is "N/A"
+df = df.filter(pl.col('gender') != 'NA')
+```
+
+```{python}
+# gglpot it
+
+''' 
+display(
+    ggplot(df, aes(x='gender', fill='character_feeling__PrincessLeiaOrgana')) 
+        + geom_bar(position='fill')) 
+        
+'''
+```
+
+```{python}
+# calculate proportions of "Very favorably" for each gender
+proportions = df.group_by('gender').agg(
+    (pl.col('character_feeling__PrincessLeiaOrgana') == 'Very favorably').mean().alias('proportion')
+)
+proportions
+```
+
+```{python}
+# gglpot it
+
+display(
+    ggplot(proportions.to_pandas(), aes(x='gender', y='proportion', fill='gender'))
+    + geom_bar(stat='identity')
+    )
+```
+
+
+
+# Q3 - ML
+Using the `dwellings_ml` dataLinks to an external site., complete the following:
+Predict if a home has a garage that can fit more than 2 cars (`nocars` is the variable that tells how many cars can fit in the home's garage)
+Use `test_size = .30` and `random_state = 2021` in `train_test_split()`
+Use the `DecisionTreeClassifier()` method
+
+When the model predicts a home has has more than a 2 car garage, what proportion of the time is the prediction correct? (enter your answer as a number between 0 and 1 with two decimal places)
+
+
+
+```{python}
+# Read in data:
+df = pl.read_csv('https://github.com/byuidatascience/data4dwellings/raw/master/data-raw/dwellings_ml/dwellings_ml.csv')
+
+# df
+```
+
+```{python}
+# there is no more time but at this point, but I would look through the code I wrote before and adapt it to this data set. 
+```
+
