@@ -66,7 +66,7 @@ q = """
     LIMIT 5                                         -- This only show highest 5
 """
 result = pl.read_database(q, con)
-display(result)
+display(result) 
 
 
 ```
@@ -99,22 +99,19 @@ result
 
 __Now modify the SQL query to calculate the batting average for players over their entire careers (all years combined). Only include players with at least 100 at bats over their entire career, and print the top 5 results.__
 
-The best of all time was hazlebo01 with a batting average of 40.3% 
+The best of all time was cobbty01 with a batting average of 36.63% 
 
 ```{python}
-# Include and execute your code here
-
 q = """
-    SELECT 
-      playerID, 
-      yearID, 
+    SELECT
+      playerID,
       CAST(SUM(H) AS REAL) / SUM(AB) AS "batting_average"
     FROM Batting                                    -- pull from this part of the database
-    WHERE AB >= 100                                   -- This keeps only player with >= 100 bats
-      GROUP BY playerID
+    GROUP BY playerID
+    HAVING SUM(AB) >= 100                           -- filters on career totals, not individual rows
     ORDER BY "batting_average" DESC, playerID ASC   -- This sorts it
     LIMIT 5                                         -- This only show highest 5
 """
 result = pl.read_database(q, con)
-result
+result 
 ```

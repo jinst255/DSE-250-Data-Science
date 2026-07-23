@@ -2257,7 +2257,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
   <li><a href="#question-2" id="toc-question-2">QUESTION 2</a></li>
   </ul>
 </nav>
-<div id="ee6c06eb" class="cell" data-execution_count="1">
+<div id="c8762ebb" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
@@ -2268,7 +2268,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>LetsPlot.setup_html(isolated_frame<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="3e31ba3f" class="cell" data-execution_count="2">
+<div id="7a14a2cb" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html</span></span>
@@ -2282,8 +2282,8 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <section id="question-1" class="level2">
 <h2 class="anchored" data-anchor-id="question-1">QUESTION 1</h2>
 <p><strong>Write an SQL query that pulls in the the salaries table and the collegeplaying table (and any other tables you might need) and store them in polars dataframes. In Python Polars, combine the dataframes to create a list of baseball players who attended BYU-Idaho. The new table should contain five columns: playerID, schoolID, salary, yearID and teamID associated with each salary.</strong></p>
-<p>With these filters there are only 30 players.</p>
-<div id="d9d1d381" class="cell" data-execution_count="3">
+<p>With these filters there are 15 records. (Only 2 different players)</p>
+<div id="ca7ea491" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>q1 <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
@@ -2305,14 +2305,18 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>salaries <span class="op">=</span> pl.read_database(q1, con)</span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>college_playing <span class="op">=</span> pl.read_database(q2, con)</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># display(salaries) # 4 columns</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># display(college_playing) # 1 column</span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> salaries.join(college_playing, on<span class="op">=</span><span class="st">&quot;playerID&quot;</span>, how<span class="op">=</span><span class="st">&quot;inner&quot;</span>).<span class="bu">filter</span>(pl.col(<span class="st">&quot;schoolID&quot;</span>) <span class="op">==</span> <span class="st">&quot;idbyuid&quot;</span>)</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>players_from_byui <span class="op">=</span> (</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    college_playing</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(pl.col(<span class="st">&quot;schoolID&quot;</span>) <span class="op">==</span> <span class="st">&quot;idbyuid&quot;</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    .select(<span class="st">&quot;playerID&quot;</span>, <span class="st">&quot;schoolID&quot;</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    .unique()</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> salaries.join(players_from_byui, on<span class="op">=</span><span class="st">&quot;playerID&quot;</span>, how<span class="op">=</span><span class="st">&quot;inner&quot;</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>display(df.head(<span class="dv">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display">
 <div><style>
 .dataframe > thead > tr,
 .dataframe > tbody > tr {
@@ -2320,7 +2324,7 @@ text-align: right;
 white-space: pre-wrap;
 }
 </style>
-<small>shape: (30, 5)</small>
+<small>shape: (10, 5)</small>
 <table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
@@ -2348,20 +2352,6 @@ white-space: pre-wrap;
 </tr>
 <tr class="even">
 <td>&quot;stephga01&quot;</td>
-<td>150000.0</td>
-<td>1997</td>
-<td>&quot;PHI&quot;</td>
-<td>&quot;idbyuid&quot;</td>
-</tr>
-<tr class="odd">
-<td>&quot;stephga01&quot;</td>
-<td>185000.0</td>
-<td>1998</td>
-<td>&quot;PHI&quot;</td>
-<td>&quot;idbyuid&quot;</td>
-</tr>
-<tr class="even">
-<td>&quot;stephga01&quot;</td>
 <td>185000.0</td>
 <td>1998</td>
 <td>&quot;PHI&quot;</td>
@@ -2375,45 +2365,52 @@ white-space: pre-wrap;
 <td>&quot;idbyuid&quot;</td>
 </tr>
 <tr class="even">
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
+<td>&quot;stephga01&quot;</td>
+<td>550000.0</td>
+<td>2000</td>
+<td>&quot;SLN&quot;</td>
+<td>&quot;idbyuid&quot;</td>
 </tr>
 <tr class="odd">
-<td>&quot;lindsma01&quot;</td>
-<td>3.6e6</td>
-<td>2012</td>
-<td>&quot;BAL&quot;</td>
+<td>&quot;stephga01&quot;</td>
+<td>1.025e6</td>
+<td>2001</td>
+<td>&quot;SLN&quot;</td>
+<td>&quot;idbyuid&quot;</td>
+</tr>
+<tr class="even">
+<td>&quot;stephga01&quot;</td>
+<td>900000.0</td>
+<td>2002</td>
+<td>&quot;SLN&quot;</td>
+<td>&quot;idbyuid&quot;</td>
+</tr>
+<tr class="odd">
+<td>&quot;stephga01&quot;</td>
+<td>800000.0</td>
+<td>2003</td>
+<td>&quot;SLN&quot;</td>
 <td>&quot;idbyuid&quot;</td>
 </tr>
 <tr class="even">
 <td>&quot;lindsma01&quot;</td>
-<td>2.3e6</td>
-<td>2013</td>
-<td>&quot;CHA&quot;</td>
+<td>380000.0</td>
+<td>2007</td>
+<td>&quot;FLO&quot;</td>
 <td>&quot;idbyuid&quot;</td>
 </tr>
 <tr class="odd">
 <td>&quot;lindsma01&quot;</td>
-<td>2.3e6</td>
-<td>2013</td>
-<td>&quot;CHA&quot;</td>
+<td>395000.0</td>
+<td>2008</td>
+<td>&quot;FLO&quot;</td>
 <td>&quot;idbyuid&quot;</td>
 </tr>
 <tr class="even">
 <td>&quot;lindsma01&quot;</td>
-<td>4e6</td>
-<td>2014</td>
-<td>&quot;CHA&quot;</td>
-<td>&quot;idbyuid&quot;</td>
-</tr>
-<tr class="odd">
-<td>&quot;lindsma01&quot;</td>
-<td>4e6</td>
-<td>2014</td>
-<td>&quot;CHA&quot;</td>
+<td>410000.0</td>
+<td>2009</td>
+<td>&quot;FLO&quot;</td>
 <td>&quot;idbyuid&quot;</td>
 </tr>
 </tbody>
@@ -2427,8 +2424,8 @@ white-space: pre-wrap;
 <ol type="1">
 <li>Pick any two baseball teams and compare them using a metric of your choice (average salary, home runs, number of wins, etc). Be creative! Write an SQL query to read in the table(s) you need, then use polars to manipulate the data. Finally, make a graph using Lets-Plot to visualize the comparison. What do you learn?</li>
 </ol>
-<p><em>Describe your results and analysis here</em></p>
-<div id="69453e10" class="cell" data-execution_count="4">
+<p>I learned that if someone plays for the New York Yankees, they’ll end up making on average, around $1.2 Million more then if they played for the Los Angeles Dodgers. I also learned that the Los Angeles Dodgers win more on average then the New York Yankees which makes sense why it pays more on average. More view, more money.</p>
+<div id="81220606" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># I couldnt name a single team so I used AI to pick two teams. I got Los Angeles Dodgers(LAN) and New York Yankees(NYA)</span></span>
@@ -2513,7 +2510,7 @@ white-space: pre-wrap;
 //# sourceMappingURL=lets-plot.js.map</script>
    
    
-          <div id="WljJgI"></div>
+          <div id="5bXIph"></div>
    <script type="text/javascript" data-lets-plot-script="plot">
    
    (function() {
@@ -2538,7 +2535,7 @@ white-space: pre-wrap;
        };
    }
    
-   const containerDiv = document.getElementById("WljJgI");
+   const containerDiv = document.getElementById("5bXIph");
    let fig = null;
    
    function renderPlot() {

@@ -47,7 +47,7 @@ df = pl.read_csv("names_year_csv.csv")
 
 __What was the earliest year that the name ‘Felisha’ was used?__
 
-It was in 1964
+It was in 1964. 
 
 ```{python}
 # Q1
@@ -117,44 +117,32 @@ print(f'My name (Justin) hit its peak in {answerA}\nIn that year there were {ans
 
 __In the most recent year, what was the most common female name in Utah?__ 
 
-In the dataset, the most recent year is 2015, and in that year, the most common name is Emma which was given to 281 number of female babies. 
+In the dataset, the most recent year is 2024, and in that year, the most common female name in Utah is Olivia which was given to about 215 female babies.
 
 ```{python}
-# Q5
 '''
+- The provided dataset has no Sex column, so "female" saddly has to come from another dataset
+  the names_prob dataset (has prob_female per name), joined to the
+  per-year/per-state counts we already have in df.
 
-- Get a dataframe with 'name', 'year', female/male, 'count', 'UT'
-
-[x] Locate data 
-[x] Clean data if needed
-[x] Load new data frame
-[x] Remove any row when 'Sex' is 'M'
-[x] Remove any row when 'StateCode' is not 'UT'
-[x] Find the .max of 'YearOfBirth'
-[x] Sort by highest 'Number' (name count)
+[x] Find the .max of 'year'
+[x] Get name + UT count for that year
+[x] Join with names_prob to get prob_female
+[x] Estimate female count = UT * prob_female
+[x] Sort by highest estimate
 [x] display the results
 '''
 
-# Load new data frame
-df_new = pl.read_csv("babyNamesUS.csv")
+names_prob = pl.read_csv("https://raw.githubusercontent.com/byuidatascience/data4names/master/data-raw/names_prob/names_prob.csv", infer_schema_length=None)
 
-# Remove any row when 'Sex' is 'M'
-df_new = df_new.filter(pl.col('Sex') == 'F')
+max_year = df.select(pl.col("year").max()).item()
 
-# Remove any row when 'StateCode' is not 'UT'
-df_new = df_new.filter(pl.col('StateCode') == 'UT') 
+df_new = df.filter(pl.col("year") == max_year).select("name", "UT")
+df_new = df_new.join(names_prob.select("name", "prob_female"), on="name", how="left").drop_nulls()
+df_new = df_new.with_columns((pl.col("UT") * pl.col("prob_female")).alias("female_estimate"))
+df_new = df_new.sort("female_estimate", descending=True)
 
-# Find the .max of 'YearOfBirth'
-# Find what year it is
-max_year = df_new.select(pl.col("YearOfBirth").max()).item()
-# Exculde all other entries
-df_new = df_new.filter(pl.col("YearOfBirth") == max_year)
-
-# Sort by highest 'Number' (name count)
-df_new = df_new.sort('Number', descending=True)
-
-# Print it all out!
-print(f'In the dataset, the most recent year is {max_year}, and in that year, the most common name is {df_new.head(1)['Name'].item()} which was given to {df_new.head(1)["Number"].item()} number of female babies.')
+print(f'In the dataset, the most recent year is {max_year}, and in that year, the most common female name in Utah is {df_new.head(1)["name"].item()} which was given to about {round(df_new.head(1)["female_estimate"].item())} female babies.')
 
 ```
 

@@ -52,7 +52,7 @@ df = pl.read_csv(io.BytesIO(response.content))
 
 ```
 
-## QUESTION
+## QUESTION 1
 
 1. __Take time to get to know your data.__ Based on some initial exploration, identify 3 variables in the dataset you think will have strong predictive ability for determining if a house was built before 1980. Explain/justify the reasoning behind your guesses (for example with plots).
 
@@ -92,7 +92,42 @@ display(df.sample(20))
 
 df.columns
 df.shape
+
+# Charts to back up my claims:
+
+# I changed the column names so that its easier to read the charts. (Instead of a 0 and 1 it can now say Pre-1980 or Post-1980 or )
+plot_df = df.with_columns(
+    pl.when(pl.col("before1980") == 1)
+    .then(pl.lit("Pre-1980"))
+    .otherwise(pl.lit("Post-1980"))
+    .alias("era"),
+    pl.when(pl.col("gartype_Att") == 1)
+    .then(pl.lit("Attached"))
+    .otherwise(pl.lit("No Attached Garage"))
+    .alias("garage_type")
+)
+
+
+display(
+    ggplot(plot_df, aes(x="era", y="livearea"))
+    + geom_boxplot()
+    + labs(title="Living Area by Before/After 1980", x="Era", y="Living Area (sqft)")
+)
+
+display(
+    ggplot(plot_df, aes(x="era", y="finbsmnt"))
+    + geom_boxplot()
+    + labs(title="Finished Basement Sqft by Before/After 1980", x="Era", y="Finished Basement (sqft)")
+)
+
+display(
+    ggplot(plot_df, aes(x="garage_type", fill="era"))
+    + geom_bar(position="fill")
+    + labs(title="Attached Garage by Before/After 1980", x="Garage Type", y="Proportion", fill="Era")
+)
 ```
+
+## QUESTION 2
 
 1. __Build a classification model labeling houses as being built “before 1980” or “during or after 1980”.__ Your goal is to reach or exceed 90% accuracy. Report your final model choice and any other model parameters you may have tweaked (train-test split ratio, tuning parameters, etc).  
 
@@ -100,7 +135,6 @@ RandomForest can get up to about 87.2% accuracy using 'livearea', 'basement', an
 But XGBoost takes the cake when you give it more then 3 inputs. You get an accuracy of 92.1% with 11 columns. 
 Interesting note but when you give XGBoost only 3 columns it only gets 85.6% accuracy. 
 In summary, XGBoost beats RandomForest when given 11 inputs by 0.1% in accuracy, but RandomForest beats XGBoost when given only 3 inputs by 6.5% in accuracy.
-
 
 ```{python}
 from sklearn.ensemble import RandomForestClassifier
@@ -120,6 +154,8 @@ model = RandomForestClassifier(
 
 model.fit(x_train, y_train)
 print("Accuracy:", accuracy_score(y_test, model.predict(x_test)))
+
+
 ```
 
 

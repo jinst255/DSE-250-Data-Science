@@ -50,7 +50,8 @@ df = pl.read_json(io.BytesIO(response.content))
 
 __Calculate the sample size (i.e. number of rows in the dataset) for each airport in each year__. What do you notice?
 
-Based on that request, there are only 89 entries (row). I used df.height to find the original total of entries. Turns out that its 89 over 924 which is a difference of 835. This mean that the data viewed under those requirements is a reduction of about 90%
+The sample size changes for airport between years by smaller values, it varies by about 1-2 rows for most airports. I also noticed that the sample size's mean is about 10, just by looking at the data.
+
 
 ```{python}
 # display(df.height)

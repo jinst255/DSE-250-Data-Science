@@ -2262,13 +2262,9 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
   <li><a href="#results" id="toc-results">Results</a></li>
   <li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
   </ul></li>
-  <li><a href="#info-for-the-stretch-task" id="toc-info-for-the-stretch-task">Info for the stretch task</a>
-  <ul>
-  <li><a href="#the-prep-we-did-in-class-july-7th" id="toc-the-prep-we-did-in-class-july-7th">The prep we did in class (July 7th)</a></li>
-  </ul></li>
   </ul>
 </nav>
-<div id="8c004c86" class="cell" data-execution_count="1">
+<div id="3fadb288" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl </span>
@@ -2284,7 +2280,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <!-- The first 10 rows are not part of the datset we need.
 
 The columns headers are split across two rows. We need to clean and simplify the column headers-->
-<div id="6a9908f1" class="cell" data-execution_count="2">
+<div id="768dba3d" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in and tidy up the first row</span></span>
@@ -2320,7 +2316,7 @@ The columns headers are split across two rows. We need to clean and simplify the
 </details>
 </div>
 <!-- Combine series q and a into one series to be used as column names-->
-<div id="a5a82bb4" class="cell" data-execution_count="3">
+<div id="7e6bdd81" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> pl.Series(pl.read_csv(data_url, skip_rows <span class="op">=</span> <span class="dv">11</span>, n_rows<span class="op">=</span><span class="dv">1</span>, has_header<span class="op">=</span><span class="va">False</span>, encoding <span class="op">=</span> <span class="st">&#39;utf8-lossy&#39;</span>).row(<span class="dv">0</span>))</span>
@@ -2334,7 +2330,7 @@ The columns headers are split across two rows. We need to clean and simplify the
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="d1edfe58" class="cell" data-execution_count="4">
+<div id="504b1aaa" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Now combine the two series, each of which contains part of the desired column header</span></span>
@@ -2347,13 +2343,13 @@ The columns headers are split across two rows. We need to clean and simplify the
 </div>
 <section id="task-1-regex" class="level1">
 <h1>Task 1 (regex)</h1>
-<div id="3c858ef9" class="cell" data-execution_count="5">
+<div id="4a8fa462" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display(df.schema)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="8b86f9df" class="cell" data-execution_count="6">
+<div id="d1fdf444" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># here I created first and last name as well as the email domain</span></span>
@@ -2366,7 +2362,7 @@ The columns headers are split across two rows. We need to clean and simplify the
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># df_new </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="131b8422" class="cell" data-execution_count="7">
+<div id="be66e0a2" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_new.group_by(<span class="st">&quot;email_domain&quot;</span>).<span class="bu">len</span>().sort(<span class="st">&quot;len&quot;</span>, descending<span class="op">=</span><span class="va">True</span>)</span>
@@ -2382,7 +2378,7 @@ The columns headers are split across two rows. We need to clean and simplify the
 </section>
 <section id="task-2-data-cleaning-prep-for-ml" class="level1">
 <h1>Task 2 (Data cleaning &amp; prep for ML)</h1>
-<div id="d93ad5af" class="cell" data-execution_count="8">
+<div id="723b38a4" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># age to int</span></span>
@@ -2396,7 +2392,7 @@ The columns headers are split across two rows. We need to clean and simplify the
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>).drop(<span class="st">&#39;age&#39;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="a4eacc8f" class="cell" data-execution_count="9">
+<div id="96a6558f" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># education to int</span></span>
@@ -2408,10 +2404,64 @@ The columns headers are split across two rows. We need to clean and simplify the
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Bachelor degree&quot;</span>: <span class="dv">4</span>,</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Graduate degree&quot;</span>: <span class="dv">5</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    }).alias(<span class="st">&quot;education_int&quot;</span>)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>).drop(<span class="st">&quot;education&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># table to show the education -&gt; education_int mapping actually applied</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>display(df_ml2.select(<span class="st">&quot;education&quot;</span>, <span class="st">&quot;education_int&quot;</span>).unique().sort(<span class="st">&quot;education_int&quot;</span>))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>df_ml2 <span class="op">=</span> df_ml2.drop(<span class="st">&quot;education&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+<div class="cell-output cell-output-display">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+text-align: right;
+white-space: pre-wrap;
+}
+</style>
+<small>shape: (6, 2)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">education</th>
+<th data-quarto-table-cell-role="th">education_int</th>
+</tr>
+<tr class="even">
+<td>str</td>
+<td>i64</td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>null</td>
+<td>null</td>
+</tr>
+<tr class="even">
+<td>&quot;Less than high school degree&quot;</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>&quot;High school degree&quot;</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>&quot;Some college or Associate degr…</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>&quot;Bachelor degree&quot;</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>&quot;Graduate degree&quot;</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="57bb02ec" class="cell" data-execution_count="10">
+</div>
+</div>
+<div id="c733565d" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_ml3 <span class="op">=</span> df_ml2.with_columns(</span>
@@ -2421,7 +2471,7 @@ The columns headers are split across two rows. We need to clean and simplify the
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># df_ml3[&#39;income_int&#39;]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="9a9e86db" class="cell" data-execution_count="11">
+<div id="5a6219f8" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># df_ml3.group_by(&quot;fav_Han_Solo&quot;).agg(pl.len())</span></span>
@@ -2441,14 +2491,14 @@ The columns headers are split across two rows. We need to clean and simplify the
 </section>
 <section id="task-3-ml" class="level1">
 <h1>Task 3 (ML)</h1>
-<div id="20991129" class="cell" data-execution_count="12">
+<div id="30d4827e" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Include and execute your code here</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.<span class="bu">filter</span>(pl.any_horizontal(pl.col(<span class="vs">r&quot;</span><span class="dv">^</span><span class="vs">seen_Episode</span><span class="dv">.</span><span class="op">*</span><span class="dv">$</span><span class="vs">&quot;</span>).is_not_null()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="93446230" class="cell" data-execution_count="13">
+<div id="5c2d8646" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.with_columns(</span>
@@ -2456,7 +2506,7 @@ The columns headers are split across two rows. We need to clean and simplify the
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>).drop_nulls(<span class="st">&quot;high_income&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="77041aa9" class="cell" data-execution_count="14">
+<div id="12b0e342" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop columns that we arent training on</span></span>
@@ -2472,90 +2522,97 @@ The columns headers are split across two rows. We need to clean and simplify the
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(x, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>) </span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> DecisionTreeClassifier()  </span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>clf.fit(X_train, y_train) </span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> clf.predict(X_test) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">42</span>, max_depth<span class="op">=</span><span class="dv">5</span>, min_samples_leaf<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>clf.fit(X_train, y_train)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> clf.predict(X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="9e2ce193" class="cell" data-execution_count="15">
+<div id="db37acf0" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, pred))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># feature importance table + chart</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>feature_names <span class="op">=</span> df.select(cs.numeric()).drop([<span class="st">&quot;respondentid&quot;</span>, <span class="st">&quot;income_int&quot;</span>, <span class="st">&quot;high_income&quot;</span>]).columns</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>importance_df <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;feature&quot;</span>: feature_names,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;importance&quot;</span>: clf.feature_importances_</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>}).sort(<span class="st">&quot;importance&quot;</span>, descending<span class="op">=</span><span class="va">True</span>).head(<span class="dv">10</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>display(importance_df)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>display(</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  ggplot(importance_df, aes(x<span class="op">=</span><span class="st">&quot;feature&quot;</span>, y<span class="op">=</span><span class="st">&quot;importance&quot;</span>))</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">&quot;identity&quot;</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> labs(title<span class="op">=</span><span class="st">&quot;Top 10 Feature Importances&quot;</span>, x<span class="op">=</span><span class="st">&quot;Feature&quot;</span>, y<span class="op">=</span><span class="st">&quot;Importance&quot;</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> theme_classic()</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> theme(axis_text_x<span class="op">=</span>element_text(angle<span class="op">=</span><span class="dv">45</span>, hjust<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>              precision    recall  f1-score   support
-
-           0       0.58      0.55      0.56        55
-           1       0.70      0.72      0.71        80
-
-    accuracy                           0.65       135
-   macro avg       0.64      0.64      0.64       135
-weighted avg       0.65      0.65      0.65       135
-</code></pre>
+<div class="cell-output cell-output-display">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+text-align: right;
+white-space: pre-wrap;
+}
+</style>
+<small>shape: (10, 2)</small>
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">feature</th>
+<th data-quarto-table-cell-role="th">importance</th>
+</tr>
+<tr class="even">
+<td>str</td>
+<td>f64</td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&quot;age_int&quot;</td>
+<td>0.187569</td>
+</tr>
+<tr class="even">
+<td>&quot;education_int&quot;</td>
+<td>0.182834</td>
+</tr>
+<tr class="odd">
+<td>&quot;fav_Anakin_Skywalker&quot;</td>
+<td>0.149806</td>
+</tr>
+<tr class="even">
+<td>&quot;fav_Jar_Jar_Binks&quot;</td>
+<td>0.097493</td>
+</tr>
+<tr class="odd">
+<td>&quot;rank_Episode_V&quot;</td>
+<td>0.075453</td>
+</tr>
+<tr class="even">
+<td>&quot;rank_Episode_IV&quot;</td>
+<td>0.065768</td>
+</tr>
+<tr class="odd">
+<td>&quot;fav_Yoda&quot;</td>
+<td>0.064156</td>
+</tr>
+<tr class="even">
+<td>&quot;rank_Episode_II&quot;</td>
+<td>0.049914</td>
+</tr>
+<tr class="odd">
+<td>&quot;fav_Obi_Wan_Kenobi&quot;</td>
+<td>0.046368</td>
+</tr>
+<tr class="even">
+<td>&quot;fav_Padme_Amidala&quot;</td>
+<td>0.02962</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<!-- Rather than a simple write up like we have been doing so far, this project requires a more structured approach. You will need to show you have completed the tasks, but will structure the report in a way that is more like a client report. The report will be structured as follows:
-
- - Executive Summary: This is a high level overview of the analysis, including the problem statement, the data used, and the main findings. It should be concise and to the point, summarizing the key insights/recommendations without going into too much detail. These are usually bullet points, no graphs. PLEASE EXPLICITLY STATE IN THIS SECTION WHETHER YOU DID THE STRETCH OR NOT! 
- - Methods: this is a high level overview of the methods used in the analysis. This should include an explanation of data preparation steps, especially how you dealt with each categorical variable and why. Showing the resulting or original distribution of variables may be helpful. Describe how you handled missing values and outliers. How did/might your decisions impact results? Explain any feature engineering steps you took. This is also where you will put the graphs you recreated to show you validated the dataset and that it matches the article.
- - Results: this is a more in-depth explanation of results. A classification report and feature importance graphs belong here.
- - Conclusion: this is where you will discuss the implication of the results, including any limitations of the analysis, and recommendations for actions/future work. It may feel repetitive to the executive summary, but it should be more detailed and include any additional insights you gained from the analysis. -->
-<section id="executive-summary" class="level2">
-<h2 class="anchored" data-anchor-id="executive-summary">Executive Summary</h2>
-<p>I went through the provided Star Wars survey data and created a cleaned dataframe that I used to build a classification model to predict if any given person in the data made more then $50K a year.</p>
-<p>I have not yet done the stretch task.</p>
-</section>
-<section id="methods" class="level2">
-<h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p>I used regular expressions to create a first, last names column and also to extract the email domain from the email column. After regex I filtered the data to those who had seen at least 1 of the Star Wars movies. After that I preped the data for ML by converting what string I should to numeric values. After that I dropped rows with nulls and columns with strings. Then I trained a decision tree classifier and printed out its report.</p>
-</section>
-<section id="results" class="level2">
-<h2 class="anchored" data-anchor-id="results">Results</h2>
-<p>The ML model got 63% accuracy on the test set.</p>
-<div id="086dfaef" class="cell" data-execution_count="16">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, pred))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>              precision    recall  f1-score   support
-
-           0       0.58      0.55      0.56        55
-           1       0.70      0.72      0.71        80
-
-    accuracy                           0.65       135
-   macro avg       0.64      0.64      0.64       135
-weighted avg       0.65      0.65      0.65       135
-</code></pre>
-</div>
-</div>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>With the given data I was able to create a model that could predict if someone makes more then $50K a year with 63% accuracy. Thats only 13% accuracy over guessing, so I learned that predicting income based on if someone likes Star Wars isnt a great way to do it.</p>
-</section>
-</section>
-<section id="info-for-the-stretch-task" class="level1">
-<h1>Info for the stretch task</h1>
-<p>The idea is that this dataset came from online. The team that got the data also published some numbers on it. The team published a report and it has some graphs. For the stretch task is I’ll pick 2 of those graphs and then recreate them to verify the data to see if their number match the data they provided.</p>
-<section id="the-prep-we-did-in-class-july-7th" class="level2">
-<h2 class="anchored" data-anchor-id="the-prep-we-did-in-class-july-7th">The prep we did in class (July 7th)</h2>
-<div id="f7270524" class="cell" data-execution_count="17">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>display(</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  ggplot(df_nonML, aes(x <span class="op">=</span> <span class="st">&#39;age&#39;</span>))</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> geom_bar()</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> facet_wrap(facets<span class="op">=</span><span class="st">&#39;gender&#39;</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> labs(title<span class="op">=</span><span class="st">&quot;Who watches Star Wars Movies?&quot;</span>, subtitle<span class="op">=</span><span class="st">&quot;Of the 835 respondents who haves seent the films&quot;</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> theme_classic()</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> theme(</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>      title<span class="op">=</span>element_text(face<span class="op">=</span><span class="st">&#39;bold&#39;</span>, size<span class="op">=</span><span class="dv">18</span>),</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>      plot_subtitle<span class="op">=</span>element_text(face<span class="op">=</span><span class="st">&#39;plain&#39;</span>, size<span class="op">=</span><span class="dv">12</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
 <div class="cell-output cell-output-display">
 
    
@@ -2566,7 +2623,7 @@ weighted avg       0.65      0.65      0.65       135
 //# sourceMappingURL=lets-plot.js.map</script>
    
    
-          <div id="vRrREA"></div>
+          <div id="xPY7Qp"></div>
    <script type="text/javascript" data-lets-plot-script="plot">
    
    (function() {
@@ -2591,166 +2648,45 @@ weighted avg       0.65      0.65      0.65       135
        };
    }
    
-   const containerDiv = document.getElementById("vRrREA");
+   const containerDiv = document.getElementById("xPY7Qp");
    let fig = null;
    
    function renderPlot() {
        if (fig === null) {
            const plotSpec = {
 "data":{
+"feature":["age_int","education_int","fav_Anakin_Skywalker","fav_Jar_Jar_Binks","rank_Episode_V","rank_Episode_IV","fav_Yoda","rank_Episode_II","fav_Obi_Wan_Kenobi","fav_Padme_Amidala"],
+"importance":[0.18756940524418686,0.18283373485507096,0.14980582549235474,0.09749276797366498,0.07545282396002621,0.065768088225622,0.0641557911782868,0.04991355483744933,0.046368308848831356,0.029620236231589936]
 },
 "mapping":{
-"x":"age"
+"x":"feature",
+"y":"importance"
 },
 "data_meta":{
 "series_annotations":[{
-"type":"int",
-"column":"respondentid"
-},{
 "type":"str",
-"column":"email"
+"column":"feature"
 },{
-"type":"str",
-"column":"seen_any"
-},{
-"type":"str",
-"column":"star_wars_fan"
-},{
-"type":"str",
-"column":"seen_Episode_I"
-},{
-"type":"str",
-"column":"seen_Episode_II"
-},{
-"type":"str",
-"column":"seen_Episode_III"
-},{
-"type":"str",
-"column":"seen_Episode_IV"
-},{
-"type":"str",
-"column":"seen_Episode_V"
-},{
-"type":"str",
-"column":"seen_Episode_VI"
-},{
-"type":"int",
-"column":"rank_Episode_I"
-},{
-"type":"int",
-"column":"rank_Episode_II"
-},{
-"type":"int",
-"column":"rank_Episode_III"
-},{
-"type":"int",
-"column":"rank_Episode_IV"
-},{
-"type":"int",
-"column":"rank_Episode_V"
-},{
-"type":"int",
-"column":"rank_Episode_VI"
-},{
-"type":"str",
-"column":"fav_Han_Solo"
-},{
-"type":"str",
-"column":"fav_Luke_Skywalker"
-},{
-"type":"str",
-"column":"fav_Princess_Leia_Organa"
-},{
-"type":"str",
-"column":"fav_Anakin_Skywalker"
-},{
-"type":"str",
-"column":"fav_Obi_Wan_Kenobi"
-},{
-"type":"str",
-"column":"fav_Emperor_Palpatine"
-},{
-"type":"str",
-"column":"fav_Darth_Vader"
-},{
-"type":"str",
-"column":"fav_Lando_Calrissian"
-},{
-"type":"str",
-"column":"fav_Boba_Fett"
-},{
-"type":"str",
-"column":"fav_C-3P0"
-},{
-"type":"str",
-"column":"fav_R2_D2"
-},{
-"type":"str",
-"column":"fav_Jar_Jar_Binks"
-},{
-"type":"str",
-"column":"fav_Padme_Amidala"
-},{
-"type":"str",
-"column":"fav_Yoda"
-},{
-"type":"str",
-"column":"who_shot_first"
-},{
-"type":"str",
-"column":"know_expanded_universe"
-},{
-"type":"str",
-"column":"expanded_universe_fan"
-},{
-"type":"str",
-"column":"star_trek_fan"
-},{
-"type":"str",
-"column":"gender"
-},{
-"type":"str",
-"column":"age"
-},{
-"type":"str",
-"column":"household_income"
-},{
-"type":"str",
-"column":"education"
-},{
-"type":"str",
-"column":"location"
-},{
-"type":"str",
-"column":"first_name"
-},{
-"type":"str",
-"column":"last_name"
-},{
-"type":"str",
-"column":"email_domain"
+"type":"float",
+"column":"importance"
 }]
 },
-"facet":{
-"name":"wrap",
-"facets":"gender",
-"order":1.0,
-"dir":"h"
-},
 "ggtitle":{
-"text":"Who watches Star Wars Movies?",
-"subtitle":"Of the 835 respondents who haves seent the films"
+"text":"Top 10 Feature Importances"
+},
+"guides":{
+"x":{
+"title":"Feature"
+},
+"y":{
+"title":"Importance"
+}
 },
 "theme":{
 "name":"classic",
-"title":{
-"face":"bold",
-"size":18.0,
-"blank":false
-},
-"plot_subtitle":{
-"face":"plain",
-"size":12.0,
+"axis_text_x":{
+"angle":45.0,
+"hjust":1.0,
 "blank":false
 }
 },
@@ -2758,22 +2694,16 @@ weighted avg       0.65      0.65      0.65       135
 "scales":[],
 "layers":[{
 "geom":"bar",
+"stat":"identity",
 "mapping":{
 },
 "data_meta":{
-"series_annotations":[{
-"column":"age",
-"factor_levels":["18-29","30-44","> 60","45-60"]
-}]
 },
 "data":{
-"..count..":[148.0,136.0,114.0,151.0,104.0,132.0,121.0,140.0],
-"age":["> 60","30-44","18-29","45-60","18-29","30-44","> 60","45-60"],
-"gender":["Female","Female","Female","Female","Male","Male","Male","Male"]
 }
 }],
 "metainfo_list":[],
-"spec_id":"2"
+"spec_id":"1"
 };
            fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
        } else {
@@ -2820,6 +2750,76 @@ weighted avg       0.65      0.65      0.65       135
 
 </div>
 </div>
+<div id="ec4da7ca" class="cell" data-execution_count="16">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, pred))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              precision    recall  f1-score   support
+
+           0       0.61      0.45      0.52        55
+           1       0.68      0.80      0.74        80
+
+    accuracy                           0.66       135
+   macro avg       0.65      0.63      0.63       135
+weighted avg       0.65      0.66      0.65       135
+</code></pre>
+</div>
+</div>
+<!-- Rather than a simple write up like we have been doing so far, this project requires a more structured approach. You will need to show you have completed the tasks, but will structure the report in a way that is more like a client report. The report will be structured as follows:
+
+ - Executive Summary: This is a high level overview of the analysis, including the problem statement, the data used, and the main findings. It should be concise and to the point, summarizing the key insights/recommendations without going into too much detail. These are usually bullet points, no graphs. PLEASE EXPLICITLY STATE IN THIS SECTION WHETHER YOU DID THE STRETCH OR NOT! 
+ - Methods: this is a high level overview of the methods used in the analysis. This should include an explanation of data preparation steps, especially how you dealt with each categorical variable and why. Showing the resulting or original distribution of variables may be helpful. Describe how you handled missing values and outliers. How did/might your decisions impact results? Explain any feature engineering steps you took. This is also where you will put the graphs you recreated to show you validated the dataset and that it matches the article.
+ - Results: this is a more in-depth explanation of results. A classification report and feature importance graphs belong here.
+ - Conclusion: this is where you will discuss the implication of the results, including any limitations of the analysis, and recommendations for actions/future work. It may feel repetitive to the executive summary, but it should be more detailed and include any additional insights you gained from the analysis. -->
+<section id="executive-summary" class="level2">
+<h2 class="anchored" data-anchor-id="executive-summary">Executive Summary</h2>
+<p>I went through the provided Star Wars survey data and created a cleaned dataframe that I used to build a classification model to predict if any given person in the data made more then $50K a year.</p>
+<p>I have not yet done the stretch task.</p>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<p>I used regular expressions to create a first, last names column and also to extract the email domain from the email column. After regex I filtered the data to those who had seen at least 1 of the Star Wars movies. After that I preped the data for ML by converting what string I should to numeric values. After that I dropped rows with nulls and columns with strings. Then I trained a decision tree classifier and printed out its report.</p>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p>The ML model got 66% accuracy on the test set.</p>
+<div id="5a84bab1" class="cell" data-execution_count="17">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, pred))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>              precision    recall  f1-score   support
+
+           0       0.61      0.45      0.52        55
+           1       0.68      0.80      0.74        80
+
+    accuracy                           0.66       135
+   macro avg       0.65      0.63      0.63       135
+weighted avg       0.65      0.66      0.65       135
+</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>With the given data I was able to create a model that could predict if someone makes more then $50K a year with 66% accuracy. Thats only 16% accuracy over guessing, so I learned that predicting income based on if someone likes Star Wars isnt a great way to do it.</p>
+<p>The top 5 best features for predicting income are: - age_int - education_int - fav_Anakin_Skywalker - fav_Jar_Jar_Binks - rank_Episode_V</p>
+<p>The feature importance chart confirms this: age_int and education_int are by far the two most important features. (Both of which dont even have to do with Star Wars)</p>
+<p>As for the content itself, we can learn that the category of people who watch Star Wars movies most is 45-60 year olds. Males are slightly more likely to have seen the films than females.</p>
+<!-- Stretch task not completed — commented out so it doesn't render in the final HTML.
+
+# Info for the stretch task
+
+The idea is that this dataset came from online. The team that got the data also published some numbers on it. The team published a report and it has some graphs. For the stretch task is I'll pick 2 of those graphs and then recreate them to verify the data to see if their number match the data they provided.
+
+
+## The prep we did in class (July 7th)
+
+-->
 </section>
 </section>
 

@@ -111,7 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div id="a2717ece" class="cell" data-execution_count="1">
+<div id="652e45d9" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
@@ -127,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.read_json(io.BytesIO(response.content))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="002fd4df" class="cell" data-execution_count="2">
+<div id="fca991f7" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use cleaned data from Task 3 </span></span>
@@ -214,7 +214,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> cleaned_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="586fdf24" class="cell" data-execution_count="3">
+<div id="e8f46e84" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>display(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -485,8 +485,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Which delay is the worst delay? Keep working with the cleaned dataset you created in the previous task. Compare the proportion of flights delayed due to Carrier, to Security, and to Late Aircraft. Show this comparison in a Chart and a Table.</p>
-<p>The worst delay is due to late aircrafts which comes in at 61.38% of delays.</p>
-<div id="cac48f55" class="cell" data-execution_count="4">
+<p>The worst delay is due to late aircrafts which comes in at 31.94% of delays.</p>
+<div id="f4098fcd" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">'''</span></span>
@@ -502,32 +502,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>Q1 <span class="op">=</span> df.select(</span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_carrier"</span>).<span class="bu">sum</span>()).alias(<span class="st">"Carrier"</span>),</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_security"</span>).<span class="bu">sum</span>()).alias(<span class="st">"Security"</span>),</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_late_aircraft"</span>).<span class="bu">sum</span>()).alias(<span class="st">"Late Aircraft"</span>)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Carrier"</span>) <span class="op">+</span> pl.col(<span class="st">"Security"</span>) <span class="op">+</span> pl.col(<span class="st">"Late Aircraft"</span>)).alias(<span class="st">"Grand_total"</span>)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Carrier"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Carrier_Proportion"</span>),</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Security"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Security_Proportion"</span>),</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Late Aircraft"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Late_Aircraft_Proportion"</span>)</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>).drop(<span class="st">"Carrier"</span>, <span class="st">"Security"</span>, <span class="st">"Late Aircraft"</span>, <span class="st">"Grand_total"</span>)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>display(Q1)</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Now I'll unpivot it so I can make a nice bar chart</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>Q1_long <span class="op">=</span> Q1.unpivot(</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">"Late_Aircraft_Proportion"</span>, <span class="st">"Carrier_Proportion"</span>, <span class="st">"Security_Proportion"</span>], <span class="co"># I put them in order here </span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"Delay_Type"</span>,</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">"Proportion"</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q1_long)</span></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    ggplot(data<span class="op">=</span>Q1_long, mapping<span class="op">=</span>aes(x<span class="op">=</span><span class="st">"Delay_Type"</span>, y<span class="op">=</span><span class="st">"Proportion"</span>))</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">"identity"</span>)</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> theme_gray()</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_late_aircraft"</span>).<span class="bu">sum</span>()).alias(<span class="st">"Late Aircraft"</span>),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_total"</span>).<span class="bu">sum</span>()).alias(<span class="st">"Grand_total"</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Carrier"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Carrier_Proportion"</span>),</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Security"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Security_Proportion"</span>),</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"Late Aircraft"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Late_Aircraft_Proportion"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>).drop(<span class="st">"Carrier"</span>, <span class="st">"Security"</span>, <span class="st">"Late Aircraft"</span>, <span class="st">"Grand_total"</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>display(Q1)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Now I'll unpivot it so I can make a nice bar chart</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>Q1_long <span class="op">=</span> Q1.unpivot(</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">"Late_Aircraft_Proportion"</span>, <span class="st">"Carrier_Proportion"</span>, <span class="st">"Security_Proportion"</span>], <span class="co"># I put them in order here </span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"Delay_Type"</span>,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">"Proportion"</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q1_long)</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    ggplot(data<span class="op">=</span>Q1_long, mapping<span class="op">=</span>aes(x<span class="op">=</span><span class="st">"Delay_Type"</span>, y<span class="op">=</span><span class="st">"Proportion"</span>))</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">"identity"</span>)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> theme_gray()</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div><style>
@@ -553,15 +552,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>0.383196</td>
-<td>0.003029</td>
-<td>0.613776</td>
+<td>0.199403</td>
+<td>0.001576</td>
+<td>0.319389</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="4">
 
    
        <meta charset="UTF-8">
@@ -569,7 +568,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        <script type="text/javascript" data-lets-plot-script="library" src="https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.9.0/js-package/distr/lets-plot.min.js"></script>
    
    
-          <div id="eFyKY4"></div>
+          <div id="Q4J00R"></div>
    <script type="text/javascript" data-lets-plot-script="plot">
    
    (function() {
@@ -594,7 +593,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        };
    }
    
-   const containerDiv = document.getElementById("eFyKY4");
+   const containerDiv = document.getElementById("Q4J00R");
    let fig = null;
    
    function renderPlot() {
@@ -602,7 +601,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
            const plotSpec = {
 "data":{
 "Delay_Type":["Late_Aircraft_Proportion","Carrier_Proportion","Security_Proportion"],
-"Proportion":[0.6137755654608302,0.38319557445181324,0.003028860087356536]
+"Proportion":[0.31938919761346285,0.19940273601687578,0.001576122034538671]
 },
 "mapping":{
 "x":"Delay_Type",
@@ -633,7 +632,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 }],
 "metainfo_list":[],
-"spec_id":"5"
+"spec_id":"1"
 };
            fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
        } else {
@@ -681,8 +680,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Create another chart that shows the proportion of delays for each reason (Carrier, Security, and Late Aircraft) across all 7 airports.</p>
-<p>The airport with the most security delays is SLC according to the data. The airport with the most carrier delays is SAN. The airport with the most late aircraft delays is ORD.</p>
-<div id="f4c9d88f" class="cell" data-execution_count="5">
+<p>The airport with the most security delays is SLC according to the data. The airport with the most carrier delays and the most amount of late aircraft delays is SAN.</p>
+<div id="6e85658a" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
@@ -706,36 +705,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>Q2_wide <span class="op">=</span> df.group_by(<span class="st">"airport_code"</span>).agg(</span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_carrier"</span>).<span class="bu">sum</span>(),</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_security"</span>).<span class="bu">sum</span>(),</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_late_aircraft"</span>).<span class="bu">sum</span>()</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    pl.sum_horizontal(</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="st">"num_of_delays_carrier"</span>, <span class="st">"num_of_delays_security"</span>, <span class="st">"num_of_delays_late_aircraft"</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    ).alias(<span class="st">"Grand_total"</span>)</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_carrier"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Carrier_Proportion"</span>),</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_security"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Security_Proportion"</span>),</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_late_aircraft"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Late_Aircraft_Proportion"</span>),</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>).drop(</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"num_of_delays_carrier"</span>, <span class="st">"num_of_delays_security"</span>, <span class="st">"num_of_delays_late_aircraft"</span>, <span class="st">"Grand_total"</span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q2_wide)</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>Q2_long <span class="op">=</span> Q2_wide.unpivot(</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"airport_code"</span>],</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">"Carrier_Proportion"</span>, <span class="st">"Security_Proportion"</span>, <span class="st">"Late_Aircraft_Proportion"</span>],</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"Delay_Type"</span>,</span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">"Proportion"</span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q2_long)</span></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    ggplot(data<span class="op">=</span>Q2_long, mapping<span class="op">=</span>aes(x<span class="op">=</span><span class="st">"airport_code"</span>, y<span class="op">=</span><span class="st">"Proportion"</span>, fill<span class="op">=</span><span class="st">"Delay_Type"</span>))</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">"identity"</span>)</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> theme_gray()</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_late_aircraft"</span>).<span class="bu">sum</span>(),</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">"num_of_delays_total"</span>).<span class="bu">sum</span>().alias(<span class="st">"Grand_total"</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>).with_columns(</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_carrier"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Carrier_Proportion"</span>),</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_security"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Security_Proportion"</span>),</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    (pl.col(<span class="st">"num_of_delays_late_aircraft"</span>) <span class="op">/</span> pl.col(<span class="st">"Grand_total"</span>)).alias(<span class="st">"Late_Aircraft_Proportion"</span>),</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>).drop(</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"num_of_delays_carrier"</span>, <span class="st">"num_of_delays_security"</span>, <span class="st">"num_of_delays_late_aircraft"</span>, <span class="st">"Grand_total"</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q2_wide)</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>Q2_long <span class="op">=</span> Q2_wide.unpivot(</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">"airport_code"</span>],</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    on<span class="op">=</span>[<span class="st">"Carrier_Proportion"</span>, <span class="st">"Security_Proportion"</span>, <span class="st">"Late_Aircraft_Proportion"</span>],</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    variable_name<span class="op">=</span><span class="st">"Delay_Type"</span>,</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">"Proportion"</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co"># display(Q2_long)</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    ggplot(data<span class="op">=</span>Q2_long, mapping<span class="op">=</span>aes(x<span class="op">=</span><span class="st">"airport_code"</span>, y<span class="op">=</span><span class="st">"Proportion"</span>, fill<span class="op">=</span><span class="st">"Delay_Type"</span>))</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">"identity"</span>)</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> theme_gray()</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div><style>
@@ -1001,7 +997,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 </div>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="5">
 
    
        <meta charset="UTF-8">
@@ -1009,7 +1005,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        <script type="text/javascript" data-lets-plot-script="library" src="https://cdn.jsdelivr.net/gh/JetBrains/lets-plot@v4.9.0/js-package/distr/lets-plot.min.js"></script>
    
    
-          <div id="axS8uv"></div>
+          <div id="B59nt7"></div>
    <script type="text/javascript" data-lets-plot-script="plot">
    
    (function() {
@@ -1034,16 +1030,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
        };
    }
    
-   const containerDiv = document.getElementById("axS8uv");
+   const containerDiv = document.getElementById("B59nt7");
    let fig = null;
    
    function renderPlot() {
        if (fig === null) {
            const plotSpec = {
 "data":{
-"airport_code":["DEN","IAD","SAN","SFO","ORD","SLC","ATL","DEN","IAD","SAN","SFO","ORD","SLC","ATL","DEN","IAD","SAN","SFO","ORD","SLC","ATL"],
+"airport_code":["SLC","ORD","SAN","SFO","IAD","ATL","DEN","SLC","ORD","SAN","SFO","IAD","ATL","DEN","SLC","ORD","SAN","SFO","IAD","ATL","DEN"],
 "Delay_Type":["Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Carrier_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Security_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion","Late_Aircraft_Proportion"],
-"Proportion":[0.39179293820339883,0.42315052715513424,0.4455588398156308,0.4090087275894057,0.3304548385496751,0.444042971453886,0.3605486426135708,0.003310112140550386,0.0024098520421724106,0.0038215268949704025,0.003298877340451714,0.0021377907841872924,0.006001329014037711,0.0023456133088916482,0.6048969496560508,0.5744396208026934,0.5506196332893988,0.5876923950701426,0.6674073706661376,0.5499556995320763,0.6371057440775376]
+"Proportion":[0.3126827841684539,0.16037793759215238,0.3262110864947582,0.20304555408313832,0.2835035941757139,0.14188375332292455,0.2488415624553113,0.004225969974653928,0.0010375229440616255,0.002797889591850718,0.0016376725782652419,0.0016145595279787733,9.23049987644649E-4,0.0021023693809642725,0.387263599142133,0.3239093671952577,0.40313021035561747,0.29175007753686527,0.38486469160132253,0.250715003606876,0.3841914628862437]
 },
 "mapping":{
 "x":"airport_code",
@@ -1078,7 +1074,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 }],
 "metainfo_list":[],
-"spec_id":"6"
+"spec_id":"2"
 };
            fig = LetsPlot.buildPlotFromProcessedSpecs(plotSpec, containerDiv, sizing);
        } else {

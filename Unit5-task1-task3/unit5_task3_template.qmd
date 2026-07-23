@@ -154,7 +154,12 @@ df_ml2 = df_ml1.with_columns(
         "Bachelor degree": 4,
         "Graduate degree": 5
     }).alias("education_int")
-).drop("education")
+)
+
+# table to show the education -> education_int mapping actually applied
+display(df_ml2.select("education", "education_int").unique().sort("education_int"))
+
+df_ml2 = df_ml2.drop("education")
 ```
 
 ```{python}
@@ -209,10 +214,30 @@ y = df.select("high_income").to_numpy().ravel()
 
 X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42) 
 
-clf = DecisionTreeClassifier()  
-clf.fit(X_train, y_train) 
-pred = clf.predict(X_test) 
+clf = DecisionTreeClassifier(random_state=42, max_depth=5, min_samples_leaf=20)
+clf.fit(X_train, y_train)
+pred = clf.predict(X_test)
 
+```
+
+```{python}
+# feature importance table + chart
+feature_names = df.select(cs.numeric()).drop(["respondentid", "income_int", "high_income"]).columns
+
+importance_df = pl.DataFrame({
+    "feature": feature_names,
+    "importance": clf.feature_importances_
+}).sort("importance", descending=True).head(10)
+
+display(importance_df)
+
+display(
+  ggplot(importance_df, aes(x="feature", y="importance"))
+  + geom_bar(stat="identity")
+  + labs(title="Top 10 Feature Importances", x="Feature", y="Importance")
+  + theme_classic()
+  + theme(axis_text_x=element_text(angle=45, hjust=1))
+)
 ```
 
 ```{python}
@@ -245,7 +270,7 @@ I used regular expressions to create a first, last names column and also to extr
 
 ## Results
 
-The ML model got 63% accuracy on the test set. 
+The ML model got 66% accuracy on the test set.
 
 ```{python}
 print(classification_report(y_test, pred))
@@ -253,25 +278,43 @@ print(classification_report(y_test, pred))
 
 ## Conclusion 
 
-With the given data I was able to create a model that could predict if someone makes more then $50K a year with 63% accuracy. Thats only 13% accuracy over guessing, so I learned that predicting income based on if someone likes Star Wars isnt a great way to do it. 
+With the given data I was able to create a model that could predict if someone makes more then $50K a year with 66% accuracy. Thats only 16% accuracy over guessing, so I learned that predicting income based on if someone likes Star Wars isnt a great way to do it.
+
+The top 5 best features for predicting income are:
+- age_int
+- education_int
+- fav_Anakin_Skywalker
+- fav_Jar_Jar_Binks
+- rank_Episode_V
+
+The feature importance chart confirms this: age_int and education_int are by far the two most important features. (Both of which dont even have to do with Star Wars)
+
+As for the content itself, we can learn that the category of people who watch Star Wars movies most is 45-60 year olds. Males are slightly more likely to have seen the films than females. 
 
 
 
 
 
-
-
+<!-- Stretch task not completed — commented out so it doesn't render in the final HTML.
 
 # Info for the stretch task
 
-The idea is that this dataset came from online. The team that got the data also published some numbers on it. The team published a report and it has some graphs. For the stretch task is I'll pick 2 of those graphs and then recreate them to verify the data to see if their number match the data they provided. 
+The idea is that this dataset came from online. The team that got the data also published some numbers on it. The team published a report and it has some graphs. For the stretch task is I'll pick 2 of those graphs and then recreate them to verify the data to see if their number match the data they provided.
 
 
 ## The prep we did in class (July 7th)
 
+-->
+
 ```{python}
+#| eval: false
+#| include: false
+# df_nonML is the full unfiltered dataset (includes people who haven't seen any movie).
+# Filter down to respondents who've seen at least one film, matching the subtitle below.
+df_seen = df_nonML.filter(pl.any_horizontal(pl.col(r"^seen_Episode.*$").is_not_null()))
+
 display(
-  ggplot(df_nonML, aes(x = 'age'))
+  ggplot(df_seen, aes(x = 'age'))
   + geom_bar()
   + facet_wrap(facets='gender')
   + labs(title="Who watches Star Wars Movies?", subtitle="Of the 835 respondents who haves seent the films")

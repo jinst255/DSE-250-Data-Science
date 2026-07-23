@@ -8,7 +8,7 @@
 
 <meta name="author" content="Justin Hair">
 
-<title>Client Report - Baseball Database SQL Query</title>
+<title>Client Report - Star Wars for Dummies</title>
 <style>
 
 code{white-space: pre-wrap;}
@@ -2221,8 +2221,8 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page">
-      <div class="quarto-title-block"><div><h1 class="title">Client Report - Baseball Database SQL Query</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> See code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
-            <p class="subtitle lead">Unit 3 Task 2</p>
+      <div class="quarto-title-block"><div><h1 class="title">Client Report - Star Wars for Dummies</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> See code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li></ul></div></div>
+            <p class="subtitle lead">Unit 5 Task 2</p>
                       </div>
   </div>
     
@@ -2254,54 +2254,139 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
    
   <ul>
   <li><a href="#question-1" id="toc-question-1">QUESTION 1</a></li>
-  <li><a href="#question-2" id="toc-question-2">QUESTION 2</a></li>
-  <li><a href="#question-3" id="toc-question-3">QUESTION 3</a></li>
   </ul>
 </nav>
-<div id="5c3c7673" class="cell" data-execution_count="1">
+<div id="b1cd9a9f" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lets_plot <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lets_plot <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars.selectors <span class="im">as</span> cs</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>LetsPlot.setup_html(isolated_frame<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>LetsPlot.setup_html(isolated_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>data_url <span class="op">=</span> <span class="st">&quot;https://byuidatascience.github.io/DS250-Course-Polars/Data/StarWars_with_emails.csv&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="efc6db92" class="cell" data-execution_count="2">
+<!-- Same load/cleanup as Task 1, carried over so this data prep task can run on its own -->
+<div id="25e12226" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># I changed the path</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sqlite_file <span class="op">=</span> <span class="st">&#39;../Unit3-task1/InClass/lahmansbaseballdb.sqlite&#39;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># this path is relative to this .qmd file</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(sqlite_file)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> pl.Series(pl.read_csv(data_url, skip_rows <span class="op">=</span> <span class="dv">10</span>, n_rows<span class="op">=</span><span class="dv">1</span>, has_header<span class="op">=</span><span class="va">False</span>, encoding <span class="op">=</span> <span class="st">&#39;utf8-lossy&#39;</span>).row(<span class="dv">0</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">2</span>] <span class="op">=</span> <span class="st">&quot;seen_any&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> (</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  a.<span class="bu">str</span>.replace(<span class="vs">r&quot;</span><span class="dv">.</span><span class="op">+</span><span class="vs">seen</span><span class="dv">.</span><span class="op">+</span><span class="vs">&quot;</span>, <span class="st">&quot;seen_&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.replace(<span class="vs">r&quot;</span><span class="dv">.</span><span class="op">+</span><span class="vs">rank</span><span class="dv">.</span><span class="op">+</span><span class="vs">&quot;</span>, <span class="st">&quot;rank_&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.replace(<span class="vs">r&quot;</span><span class="kw">(</span><span class="dv">.</span><span class="op">+</span><span class="vs">favorably</span><span class="dv">.</span><span class="op">+</span><span class="kw">)</span><span class="vs">&quot;</span>, <span class="st">&quot;fav_&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>   .fill_null(strategy <span class="op">=</span> <span class="st">&quot;forward&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.replace(<span class="st">&quot;�+&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.strip_chars()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.to_lowercase()</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.replace_all(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.replace(<span class="vs">r&quot;location</span><span class="kw">(</span><span class="dv">.</span><span class="op">+</span><span class="kw">)</span><span class="vs">&quot;</span>, <span class="st">&quot;location&quot;</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">3</span>] <span class="op">=</span> <span class="st">&quot;star_wars_fan&quot;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">30</span>] <span class="op">=</span> <span class="st">&quot;who_shot_first&quot;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">31</span>] <span class="op">=</span> <span class="st">&quot;know_expanded_universe&quot;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">32</span>] <span class="op">=</span> <span class="st">&quot;expanded_universe_fan&quot;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">33</span>] <span class="op">=</span> <span class="st">&quot;star_trek_fan&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="fb5bdb03" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> pl.Series(pl.read_csv(data_url, skip_rows <span class="op">=</span> <span class="dv">11</span>, n_rows<span class="op">=</span><span class="dv">1</span>, has_header<span class="op">=</span><span class="va">False</span>, encoding <span class="op">=</span> <span class="st">&#39;utf8-lossy&#39;</span>).row(<span class="dv">0</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> (</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  b.<span class="bu">str</span>.replace(<span class="vs">r&quot;Star Wars: </span><span class="kw">(</span><span class="vs">Episode </span><span class="dv">\w</span><span class="op">+</span><span class="kw">)</span><span class="vs"> </span><span class="dv">.</span><span class="op">+</span><span class="vs">&quot;</span>, <span class="st">&quot;$</span><span class="sc">{1}</span><span class="st">&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.replace(<span class="st">&quot;Response&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.replace_all(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>   .fill_null(<span class="st">&quot;&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>   .<span class="bu">str</span>.strip_chars()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="451c4128" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>new_names <span class="op">=</span> (a <span class="op">+</span> b).to_list()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pl.read_csv(data_url, skip_rows<span class="op">=</span><span class="dv">12</span>, has_header<span class="op">=</span><span class="va">False</span>, new_columns <span class="op">=</span> new_names )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="48e1dd4e" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># email regex from Task 1, carried over</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> df.with_columns(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  pl.col(<span class="st">&quot;email&quot;</span>).<span class="bu">str</span>.extract(<span class="vs">r&quot;</span><span class="dv">^</span><span class="kw">(</span><span class="pp">[a-zA-Z]</span><span class="op">+</span><span class="kw">)</span><span class="vs">&quot;</span>, <span class="dv">1</span>).<span class="bu">str</span>.strip_chars().alias(<span class="st">&quot;first_name&quot;</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  pl.col(<span class="st">&quot;email&quot;</span>).<span class="bu">str</span>.extract(<span class="vs">r&quot;</span><span class="pp">[._</span><span class="dv">\d</span><span class="pp">]</span><span class="kw">(</span><span class="pp">[a-zA-Z]</span><span class="op">+</span><span class="kw">)</span><span class="vs">@&quot;</span>, <span class="dv">1</span>).<span class="bu">str</span>.strip_chars().alias(<span class="st">&quot;last_name&quot;</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  pl.col(<span class="st">&quot;email&quot;</span>).<span class="bu">str</span>.extract(<span class="vs">r&quot;@</span><span class="kw">(</span><span class="dv">.</span><span class="op">+</span><span class="kw">)</span><span class="dv">$</span><span class="vs">&quot;</span>, <span class="dv">1</span>).<span class="bu">str</span>.to_lowercase().<span class="bu">str</span>.strip_chars().alias(<span class="st">&quot;email_domain&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <section id="question-1" class="level2">
 <h2 class="anchored" data-anchor-id="question-1">QUESTION 1</h2>
-<p><strong>Write an SQL query that provides playerID, yearID, and batting average for players with at least 1 at bat that year. Sort the table from highest batting average to lowest, and then by playerid alphabetically. Show the top 5 results in your report.</strong></p>
-<p>Our top guy according to this data is aberal01. But when we use a search where ab &gt;= 1 we honestly dont get good results. All top 5 people have the same score.</p>
-<div id="3742579b" class="cell" data-execution_count="3">
+<ol type="1">
+<li><strong>Clean and recode age, education, household_income, and the fav_ columns so they’re ready for ML.</strong></li>
+</ol>
+<div id="e3ed54ce" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The code below can serve as a template for all the rest of your queries. It is just missing the</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># SQL code. Put your SQL query in between the triple quotation marks to create the query. The records will be stored in &#39;results&#39;, which is a polars data frame</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT </span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">      playerID, </span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="st">      yearID, </span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="st">      CAST(H AS REAL) / AB AS &quot;batting_average&quot;</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM Batting                                    -- pull from this part of the database</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE AB &gt;= 1                                   -- This keeps only player with &gt;= 1 bats</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY &quot;batting_average&quot; DESC, playerID ASC   -- This sorts it</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">    LIMIT 5                                         -- This only show highest 5</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pl.read_database(q, con)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>display(result) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># only keep respondents who&#39;ve seen at least one film</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df_ml <span class="op">=</span> df_new.<span class="bu">filter</span>(pl.any_horizontal(pl.col(<span class="vs">r&quot;</span><span class="dv">^</span><span class="vs">seen_Episode</span><span class="dv">.</span><span class="op">*</span><span class="dv">$</span><span class="vs">&quot;</span>).is_not_null()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="93dbd20a" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># age to int</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df_ml1 <span class="op">=</span> df_ml.with_columns(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  pl.col(<span class="st">&#39;age&#39;</span>).<span class="bu">str</span>.extract(<span class="vs">r&quot;</span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs">&quot;</span>, <span class="dv">1</span>).cast(pl.Int32).alias(<span class="st">&quot;age_int&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>).drop(<span class="st">&#39;age&#39;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="d9326eae" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># education to int</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df_ml2 <span class="op">=</span> df_ml1.with_columns(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;education&quot;</span>).replace_strict({</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Less than high school degree&quot;</span>: <span class="dv">1</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;High school degree&quot;</span>: <span class="dv">2</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Some college or Associate degree&quot;</span>: <span class="dv">3</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Bachelor degree&quot;</span>: <span class="dv">4</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Graduate degree&quot;</span>: <span class="dv">5</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    }).alias(<span class="st">&quot;education_int&quot;</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>).drop(<span class="st">&quot;education&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="ebdb1a9f" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># household_income to int</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df_ml3 <span class="op">=</span> df_ml2.with_columns(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    pl.col(<span class="st">&quot;household_income&quot;</span>).<span class="bu">str</span>.replace_all(<span class="vs">r&quot;,&quot;</span>, <span class="st">&quot;&quot;</span>).<span class="bu">str</span>.extract(<span class="vs">r&quot;</span><span class="dv">^</span><span class="ch">\$</span><span class="kw">(</span><span class="pp">[</span><span class="dv">\d</span><span class="pp">]</span><span class="op">+</span><span class="kw">)</span><span class="vs">&quot;</span>, <span class="dv">1</span>).cast(pl.Int32).alias(<span class="st">&quot;income_int&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>).drop(<span class="st">&quot;household_income&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="06b8f86e" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fav_ columns to numeric scale</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_final <span class="op">=</span> df_ml3.with_columns(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    cs.starts_with(<span class="st">&quot;fav_&quot;</span>).replace_strict({</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Very unfavorably&quot;</span>: <span class="dv">1</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Somewhat unfavorably&quot;</span>: <span class="dv">2</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Neither favorably nor unfavorably (neutral)&quot;</span>: <span class="dv">3</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Somewhat favorably&quot;</span>: <span class="dv">4</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Very favorably&quot;</span>: <span class="dv">5</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Unfamiliar (N/A)&quot;</span>: <span class="dv">0</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>display(df_final.head(<span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div><style>
@@ -2311,188 +2396,318 @@ text-align: right;
 white-space: pre-wrap;
 }
 </style>
-<small>shape: (5, 3)</small>
+<small>shape: (5, 42)</small>
 <table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th">playerID</th>
-<th data-quarto-table-cell-role="th">yearID</th>
-<th data-quarto-table-cell-role="th">batting_average</th>
+<th data-quarto-table-cell-role="th">respondentid</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">seen_any</th>
+<th data-quarto-table-cell-role="th">star_wars_fan</th>
+<th data-quarto-table-cell-role="th">seen_Episode_I</th>
+<th data-quarto-table-cell-role="th">seen_Episode_II</th>
+<th data-quarto-table-cell-role="th">seen_Episode_III</th>
+<th data-quarto-table-cell-role="th">seen_Episode_IV</th>
+<th data-quarto-table-cell-role="th">seen_Episode_V</th>
+<th data-quarto-table-cell-role="th">seen_Episode_VI</th>
+<th data-quarto-table-cell-role="th">rank_Episode_I</th>
+<th data-quarto-table-cell-role="th">rank_Episode_II</th>
+<th data-quarto-table-cell-role="th">rank_Episode_III</th>
+<th data-quarto-table-cell-role="th">rank_Episode_IV</th>
+<th data-quarto-table-cell-role="th">rank_Episode_V</th>
+<th data-quarto-table-cell-role="th">rank_Episode_VI</th>
+<th data-quarto-table-cell-role="th">fav_Han_Solo</th>
+<th data-quarto-table-cell-role="th">fav_Luke_Skywalker</th>
+<th data-quarto-table-cell-role="th">fav_Princess_Leia_Organa</th>
+<th data-quarto-table-cell-role="th">fav_Anakin_Skywalker</th>
+<th data-quarto-table-cell-role="th">fav_Obi_Wan_Kenobi</th>
+<th data-quarto-table-cell-role="th">fav_Emperor_Palpatine</th>
+<th data-quarto-table-cell-role="th">fav_Darth_Vader</th>
+<th data-quarto-table-cell-role="th">fav_Lando_Calrissian</th>
+<th data-quarto-table-cell-role="th">fav_Boba_Fett</th>
+<th data-quarto-table-cell-role="th">fav_C-3P0</th>
+<th data-quarto-table-cell-role="th">fav_R2_D2</th>
+<th data-quarto-table-cell-role="th">fav_Jar_Jar_Binks</th>
+<th data-quarto-table-cell-role="th">fav_Padme_Amidala</th>
+<th data-quarto-table-cell-role="th">fav_Yoda</th>
+<th data-quarto-table-cell-role="th">who_shot_first</th>
+<th data-quarto-table-cell-role="th">know_expanded_universe</th>
+<th data-quarto-table-cell-role="th">expanded_universe_fan</th>
+<th data-quarto-table-cell-role="th">star_trek_fan</th>
+<th data-quarto-table-cell-role="th">gender</th>
+<th data-quarto-table-cell-role="th">location</th>
+<th data-quarto-table-cell-role="th">first_name</th>
+<th data-quarto-table-cell-role="th">last_name</th>
+<th data-quarto-table-cell-role="th">email_domain</th>
+<th data-quarto-table-cell-role="th">age_int</th>
+<th data-quarto-table-cell-role="th">education_int</th>
+<th data-quarto-table-cell-role="th">income_int</th>
 </tr>
 <tr class="even">
+<td>i64</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
 <td>str</td>
 <td>i64</td>
-<td>f64</td>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>&quot;aberal01&quot;</td>
-<td>1957</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td>&quot;abernte02&quot;</td>
-<td>1960</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td>&quot;abramge01&quot;</td>
-<td>1923</td>
-<td>1.0</td>
-</tr>
-<tr class="even">
-<td>&quot;acklefr01&quot;</td>
-<td>1964</td>
-<td>1.0</td>
-</tr>
-<tr class="odd">
-<td>&quot;alanirj01&quot;</td>
-<td>2019</td>
-<td>1.0</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="question-2" class="level2">
-<h2 class="anchored" data-anchor-id="question-2">QUESTION 2</h2>
-<p><strong>Use the same query as above, but only include players with at least 10 at bats that year. Print the top 5 results.</strong></p>
-<p>There we go. This is much higher quaility data. We can now see that nymanny01 is the best when it comes to these filters.</p>
-<div id="523daa03" class="cell" data-execution_count="4">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Include and execute your code here</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT </span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">      playerID, </span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">      yearID, </span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">      CAST(H AS REAL) / AB AS &quot;batting_average&quot;</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM Batting                                    -- pull from this part of the database</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">    WHERE AB &gt;= 10                                   -- This keeps only player with &gt;= 10 bats</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY &quot;batting_average&quot; DESC, playerID ASC   -- This sorts it</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">    LIMIT 5                                         -- This only show highest 5</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pl.read_database(q, con)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="4">
-<div><style>
-.dataframe > thead > tr,
-.dataframe > tbody > tr {
-text-align: right;
-white-space: pre-wrap;
-}
-</style>
-<small>shape: (5, 3)</small>
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th">playerID</th>
-<th data-quarto-table-cell-role="th">yearID</th>
-<th data-quarto-table-cell-role="th">batting_average</th>
-</tr>
-<tr class="even">
-<td>str</td>
 <td>i64</td>
-<td>f64</td>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>&quot;nymanny01&quot;</td>
-<td>1974</td>
-<td>0.642857</td>
-</tr>
-<tr class="even">
-<td>&quot;carsoma01&quot;</td>
-<td>2013</td>
-<td>0.636364</td>
-</tr>
-<tr class="odd">
-<td>&quot;altizda01&quot;</td>
-<td>1910</td>
-<td>0.6</td>
-</tr>
-<tr class="even">
-<td>&quot;johnsde01&quot;</td>
-<td>1975</td>
-<td>0.6</td>
-</tr>
-<tr class="odd">
-<td>&quot;silvech01&quot;</td>
-<td>1948</td>
-<td>0.571429</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="question-3" class="level2">
-<h2 class="anchored" data-anchor-id="question-3">QUESTION 3</h2>
-<p><strong>Now modify the SQL query to calculate the batting average for players over their entire careers (all years combined). Only include players with at least 100 at bats over their entire career, and print the top 5 results.</strong></p>
-<p>The best of all time was cobbty01 with a batting average of 36.63%</p>
-<div id="25fbf07b" class="cell" data-execution_count="5">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">    SELECT</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">      playerID,</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">      CAST(SUM(H) AS REAL) / SUM(AB) AS &quot;batting_average&quot;</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">    FROM Batting                                    -- pull from this part of the database</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">    GROUP BY playerID</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">    HAVING SUM(AB) &gt;= 100                           -- filters on career totals, not individual rows</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">    ORDER BY &quot;batting_average&quot; DESC, playerID ASC   -- This sorts it</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">    LIMIT 5                                         -- This only show highest 5</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pl.read_database(q, con)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>result </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="5">
-<div><style>
-.dataframe > thead > tr,
-.dataframe > tbody > tr {
-text-align: right;
-white-space: pre-wrap;
-}
-</style>
-<small>shape: (5, 2)</small>
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th">playerID</th>
-<th data-quarto-table-cell-role="th">batting_average</th>
-</tr>
-<tr class="even">
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
+<td>i64</td>
 <td>str</td>
-<td>f64</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>str</td>
+<td>i32</td>
+<td>i64</td>
+<td>i32</td>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>&quot;cobbty01&quot;</td>
-<td>0.366299</td>
+<td>3292879998</td>
+<td>&quot;atticus.kensington@GMAIL&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Star Wars: Episode I  The Phan…</td>
+<td>&quot;Star Wars: Episode II  Attack …</td>
+<td>&quot;Star Wars: Episode III  Reveng…</td>
+<td>&quot;Star Wars: Episode IV  A New H…</td>
+<td>&quot;Star Wars: Episode V The Empir…</td>
+<td>&quot;Star Wars: Episode VI Return o…</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>&quot;I don&#39;t understand this questi…</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;No&quot;</td>
+<td>&quot;No&quot;</td>
+<td>&quot;Male&quot;</td>
+<td>&quot;South Atlantic&quot;</td>
+<td>&quot;atticus&quot;</td>
+<td>&quot;kensington&quot;</td>
+<td>&quot;gmail&quot;</td>
+<td>18</td>
+<td>2</td>
+<td>null</td>
 </tr>
 <tr class="even">
-<td>&quot;barnero01&quot;</td>
-<td>0.359682</td>
+<td>3292765271</td>
+<td>&quot;carrington54543jack@myorg&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;No&quot;</td>
+<td>&quot;Star Wars: Episode I  The Phan…</td>
+<td>&quot;Star Wars: Episode II  Attack …</td>
+<td>&quot;Star Wars: Episode III  Reveng…</td>
+<td>null</td>
+<td>null</td>
+<td>null</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>&quot;I don&#39;t understand this questi…</td>
+<td>&quot;No&quot;</td>
+<td>null</td>
+<td>&quot;No&quot;</td>
+<td>&quot;Male&quot;</td>
+<td>&quot;West North Central&quot;</td>
+<td>&quot;carrington&quot;</td>
+<td>&quot;jack&quot;</td>
+<td>&quot;myorg&quot;</td>
+<td>18</td>
+<td>2</td>
+<td>0</td>
 </tr>
 <tr class="odd">
-<td>&quot;hornsro01&quot;</td>
-<td>0.358497</td>
+<td>3292763116</td>
+<td>&quot;emma.miller@gmaiL &quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Star Wars: Episode I  The Phan…</td>
+<td>&quot;Star Wars: Episode II  Attack …</td>
+<td>&quot;Star Wars: Episode III  Reveng…</td>
+<td>&quot;Star Wars: Episode IV  A New H…</td>
+<td>&quot;Star Wars: Episode V The Empir…</td>
+<td>&quot;Star Wars: Episode VI Return o…</td>
+<td>5</td>
+<td>6</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>5</td>
+<td>4</td>
+<td>2</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>&quot;I don&#39;t understand this questi…</td>
+<td>&quot;No&quot;</td>
+<td>null</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Male&quot;</td>
+<td>&quot;West North Central&quot;</td>
+<td>&quot;emma&quot;</td>
+<td>&quot;miller&quot;</td>
+<td>&quot;gmail&quot;</td>
+<td>18</td>
+<td>3</td>
+<td>100000</td>
 </tr>
 <tr class="even">
-<td>&quot;jacksjo01&quot;</td>
-<td>0.355752</td>
+<td>3292731220</td>
+<td>&quot;brielle.ironwood@GMAIL &quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Star Wars: Episode I  The Phan…</td>
+<td>&quot;Star Wars: Episode II  Attack …</td>
+<td>&quot;Star Wars: Episode III  Reveng…</td>
+<td>&quot;Star Wars: Episode IV  A New H…</td>
+<td>&quot;Star Wars: Episode V The Empir…</td>
+<td>&quot;Star Wars: Episode VI Return o…</td>
+<td>5</td>
+<td>4</td>
+<td>6</td>
+<td>2</td>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>5</td>
+<td>1</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>1</td>
+<td>4</td>
+<td>4</td>
+<td>&quot;Greedo&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;No&quot;</td>
+<td>&quot;No&quot;</td>
+<td>&quot;Male&quot;</td>
+<td>&quot;West North Central&quot;</td>
+<td>&quot;brielle&quot;</td>
+<td>&quot;ironwood&quot;</td>
+<td>&quot;gmail&quot;</td>
+<td>18</td>
+<td>3</td>
+<td>100000</td>
 </tr>
 <tr class="odd">
-<td>&quot;meyerle01&quot;</td>
-<td>0.355509</td>
+<td>3292719380</td>
+<td>&quot;harper.ashford@GmAIl &quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Star Wars: Episode I  The Phan…</td>
+<td>&quot;Star Wars: Episode II  Attack …</td>
+<td>&quot;Star Wars: Episode III  Reveng…</td>
+<td>&quot;Star Wars: Episode IV  A New H…</td>
+<td>&quot;Star Wars: Episode V The Empir…</td>
+<td>&quot;Star Wars: Episode VI Return o…</td>
+<td>1</td>
+<td>4</td>
+<td>3</td>
+<td>6</td>
+<td>5</td>
+<td>2</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>3</td>
+<td>5</td>
+<td>3</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>&quot;Han&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;No&quot;</td>
+<td>&quot;Yes&quot;</td>
+<td>&quot;Male&quot;</td>
+<td>&quot;Middle Atlantic&quot;</td>
+<td>&quot;harper&quot;</td>
+<td>&quot;ashford&quot;</td>
+<td>&quot;gmail&quot;</td>
+<td>18</td>
+<td>4</td>
+<td>25000</td>
 </tr>
 </tbody>
 </table>

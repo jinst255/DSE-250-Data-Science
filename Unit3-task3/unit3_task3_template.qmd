@@ -48,7 +48,7 @@ con = sqlite3.connect(sqlite_file)
 
 __Write an SQL query that pulls in the the salaries table and the collegeplaying table (and any other tables you might need) and store them in polars dataframes. In Python Polars, combine the dataframes to create a list of baseball players who attended BYU-Idaho. The new table should contain five columns: playerID, schoolID, salary, yearID and teamID associated with each salary.__
 
-With these filters there are only 30 players. 
+With these filters there are 15 records. (Only 2 different players)
 
 ```{python}
 q1 = """
@@ -70,10 +70,14 @@ q2 = """
 salaries = pl.read_database(q1, con)
 college_playing = pl.read_database(q2, con)
 
-# display(salaries) # 4 columns
-# display(college_playing) # 1 column
+players_from_byui = (
+    college_playing
+    .filter(pl.col("schoolID") == "idbyuid")
+    .select("playerID", "schoolID")
+    .unique()
+)
 
-df = salaries.join(college_playing, on="playerID", how="inner").filter(pl.col("schoolID") == "idbyuid")
+df = salaries.join(players_from_byui, on="playerID", how="inner")
 
 display(df.head(10))
 
@@ -82,9 +86,9 @@ display(df.head(10))
 
 ## QUESTION 2
 
-1. Pick any two baseball teams and compare them using a metric of your choice (average salary, home runs, number of wins, etc). Be creative! Write an SQL query to read in the table(s) you need, then use polars to manipulate the data. Finally, make a graph using Lets-Plot to visualize the comparison. What do you learn?
+1. Pick any two baseball teams and compare them using a metric of your choice (average salary, home runs, number of wins, etc). Be creative! Write an SQL query to read in the table(s) you need, then use polars to manipulate the data. Finally, make a graph using Lets-Plot to visualize the comparison. What do you learn? 
 
-_Describe your results and analysis here_
+I learned that if someone plays for the New York Yankees, they'll end up making on average, around $1.2 Million more then if they played for the Los Angeles Dodgers. I also learned that the Los Angeles Dodgers win more on average then the New York Yankees which makes sense why it pays more on average. More view, more money.
 
 ```{python}
 # I couldnt name a single team so I used AI to pick two teams. I got Los Angeles Dodgers(LAN) and New York Yankees(NYA)

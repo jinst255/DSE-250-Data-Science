@@ -1,0 +1,139 @@
+---
+title: "Client Report - Star Wars for Dummies"
+subtitle: "Unit 5 Task 2"
+author: "Justin Hair"
+format:
+  html:
+    self-contained: true
+    page-layout: full
+    title-block-banner: true
+    toc: true
+    toc-depth: 3
+    toc-location: body
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-copy: hover
+    code-tools:
+        source: false
+        toggle: true
+        caption: See code
+execute:
+  warning: false
+
+---
+
+```{python}
+import polars as pl
+import numpy as np
+from lets_plot import *
+import polars.selectors as cs
+
+LetsPlot.setup_html(isolated_frame=True)
+
+data_url = "https://byuidatascience.github.io/DS250-Course-Polars/Data/StarWars_with_emails.csv"
+```
+
+<!-- Same load/cleanup as Task 1, carried over so this data prep task can run on its own -->
+
+```{python}
+a = pl.Series(pl.read_csv(data_url, skip_rows = 10, n_rows=1, has_header=False, encoding = 'utf8-lossy').row(0))
+a[2] = "seen_any"
+
+a = (
+  a.str.replace(r".+seen.+", "seen_")
+   .str.replace(r".+rank.+", "rank_")
+   .str.replace(r"(.+favorably.+)", "fav_")
+   .fill_null(strategy = "forward")
+   .str.replace("�+", "")
+   .str.strip_chars()
+   .str.to_lowercase()
+   .str.replace_all(" ", "_")
+   .str.replace(r"location(.+)", "location")
+)
+a[3] = "star_wars_fan"
+a[30] = "who_shot_first"
+a[31] = "know_expanded_universe"
+a[32] = "expanded_universe_fan"
+a[33] = "star_trek_fan"
+```
+
+```{python}
+b = pl.Series(pl.read_csv(data_url, skip_rows = 11, n_rows=1, has_header=False, encoding = 'utf8-lossy').row(0))
+
+b = (
+  b.str.replace(r"Star Wars: (Episode \w+) .+", "${1}")
+   .str.replace("Response", "")
+   .str.replace_all(" ", "_")
+   .fill_null("")
+   .str.strip_chars()
+)
+```
+
+```{python}
+new_names = (a + b).to_list()
+df = pl.read_csv(data_url, skip_rows=12, has_header=False, new_columns = new_names )
+```
+
+```{python}
+# email regex from Task 1, carried over
+df_new = df.with_columns(
+  pl.col("email").str.extract(r"^([a-zA-Z]+)", 1).str.strip_chars().alias("first_name"),
+  pl.col("email").str.extract(r"[._\d]([a-zA-Z]+)@", 1).str.strip_chars().alias("last_name"),
+  pl.col("email").str.extract(r"@(.+)$", 1).str.to_lowercase().str.strip_chars().alias("email_domain")
+)
+```
+
+## QUESTION 1
+
+1. __Clean and recode age, education, household_income, and the fav_ columns so they're ready for ML.__
+
+```{python}
+# only keep respondents who've seen at least one film
+df_ml = df_new.filter(pl.any_horizontal(pl.col(r"^seen_Episode.*$").is_not_null()))
+```
+
+```{python}
+# age to int
+df_ml1 = df_ml.with_columns(
+  pl.col('age').str.extract(r"(\d+)", 1).cast(pl.Int32).alias("age_int")
+).drop('age')
+```
+
+```{python}
+# education to int
+df_ml2 = df_ml1.with_columns(
+    pl.col("education").replace_strict({
+        "Less than high school degree": 1,
+        "High school degree": 2,
+        "Some college or Associate degree": 3,
+        "Bachelor degree": 4,
+        "Graduate degree": 5
+    }).alias("education_int")
+).drop("education")
+```
+
+```{python}
+# household_income to int
+df_ml3 = df_ml2.with_columns(
+    pl.col("household_income").str.replace_all(r",", "").str.extract(r"^\$([\d]+)", 1).cast(pl.Int32).alias("income_int")
+).drop("household_income")
+```
+
+```{python}
+# fav_ columns to numeric scale
+df_final = df_ml3.with_columns(
+    cs.starts_with("fav_").replace_strict({
+        "Very unfavorably": 1,
+        "Somewhat unfavorably": 2,
+        "Neither favorably nor unfavorably (neutral)": 3,
+        "Somewhat favorably": 4,
+        "Very favorably": 5,
+        "Unfamiliar (N/A)": 0
+    })
+)
+
+display(df_final.head(5))
+```

@@ -138,6 +138,14 @@ nullified_df = nullified_df.with_columns(
      ]
  )
 
+
+# added in row printing that needs displayed that I cleaned
+row = nullified_df.filter(pl.any_horizontal(pl.all().is_null())).head(1) 
+
+print("Here's an example of what a cleaned row looks like as JSON:")
+print(row.write_json())
+
+
 ```
 
 ## QUESTION 2

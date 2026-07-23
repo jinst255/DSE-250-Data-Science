@@ -118,7 +118,7 @@ display(df)
 
 Which delay is the worst delay? Keep working with the cleaned dataset you created in the previous task. Compare the proportion of flights delayed due to Carrier, to Security, and to Late Aircraft. Show this comparison in a Chart and a Table. 
 
-The worst delay is due to late aircrafts which comes in at 61.38% of delays.
+The worst delay is due to late aircrafts which comes in at 31.94% of delays.
 
 ```{python}
 '''
@@ -134,9 +134,8 @@ Todo:
 Q1 = df.select(
     (pl.col("num_of_delays_carrier").sum()).alias("Carrier"),
     (pl.col("num_of_delays_security").sum()).alias("Security"),
-    (pl.col("num_of_delays_late_aircraft").sum()).alias("Late Aircraft")
-).with_columns(
-    (pl.col("Carrier") + pl.col("Security") + pl.col("Late Aircraft")).alias("Grand_total")
+    (pl.col("num_of_delays_late_aircraft").sum()).alias("Late Aircraft"),
+    (pl.col("num_of_delays_total").sum()).alias("Grand_total")
 ).with_columns(
     (pl.col("Carrier") / pl.col("Grand_total")).alias("Carrier_Proportion"),
     (pl.col("Security") / pl.col("Grand_total")).alias("Security_Proportion"),
@@ -166,7 +165,7 @@ Q1_long = Q1.unpivot(
 
 Create another chart that shows the proportion of delays for each reason (Carrier, Security, and Late Aircraft) across all 7 airports. 
 
-The airport with the most security delays is SLC according to the data. The airport with the most carrier delays is SAN. The airport with the most late aircraft delays is ORD.
+The airport with the most security delays is SLC according to the data. The airport with the most carrier delays and the most amount of late aircraft delays is SAN. 
 
 ```{python}
 """
@@ -190,11 +189,8 @@ display(df)
 Q2_wide = df.group_by("airport_code").agg(
     pl.col("num_of_delays_carrier").sum(),
     pl.col("num_of_delays_security").sum(),
-    pl.col("num_of_delays_late_aircraft").sum()
-).with_columns(
-    pl.sum_horizontal(
-        "num_of_delays_carrier", "num_of_delays_security", "num_of_delays_late_aircraft"
-    ).alias("Grand_total")
+    pl.col("num_of_delays_late_aircraft").sum(),
+    pl.col("num_of_delays_total").sum().alias("Grand_total")
 ).with_columns(
     (pl.col("num_of_delays_carrier") / pl.col("Grand_total")).alias("Carrier_Proportion"),
     (pl.col("num_of_delays_security") / pl.col("Grand_total")).alias("Security_Proportion"),

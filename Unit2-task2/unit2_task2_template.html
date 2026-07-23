@@ -2258,7 +2258,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
   <li><a href="#question-3" id="toc-question-3">QUESTION 3</a></li>
   </ul>
 </nav>
-<div id="51280240" class="cell" data-execution_count="1">
+<div id="1262e10c" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
@@ -2270,7 +2270,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>LetsPlot.setup_html(isolated_frame<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="25e7a958" class="cell" data-execution_count="2">
+<div id="5bed0bfc" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Learn morea about Code Cells: https://quarto.org/docs/reference/cells/cells-jupyter.html</span></span>
@@ -2284,8 +2284,8 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <section id="question-1" class="level2">
 <h2 class="anchored" data-anchor-id="question-1">QUESTION 1</h2>
 <p><strong>Calculate the sample size (i.e. number of rows in the dataset) for each airport in each year</strong>. What do you notice?</p>
-<p>Based on that request, there are only 89 entries (row). I used df.height to find the original total of entries. Turns out that its 89 over 924 which is a difference of 835. This mean that the data viewed under those requirements is a reduction of about 90%</p>
-<div id="a45ef49e" class="cell" data-execution_count="3">
+<p>The sample size changes for airport between years by smaller values, it varies by about 1-2 rows for most airports. I also noticed that the sample size’s mean is about 10, just by looking at the data.</p>
+<div id="bb381eb3" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># display(df.height)</span></span>
@@ -2318,58 +2318,58 @@ white-space: pre-wrap;
 </thead>
 <tbody>
 <tr class="odd">
-<td>&quot;San Francisco, CA: San Francis…</td>
-<td>2015</td>
+<td>&quot;Washington, DC: Washington Dul…</td>
+<td>2009</td>
 <td>11</td>
 </tr>
 <tr class="even">
+<td>&quot;Chicago, IL: Chicago O&#39;Hare In…</td>
+<td>2015</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td>&quot;Denver, CO: Denver Internation…</td>
+<td>2005</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>&quot;&quot;</td>
+<td>2010</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>&quot;&quot;</td>
+<td>2012</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="odd">
 <td>&quot;Washington, DC: Washington Dul…</td>
 <td>2007</td>
 <td>11</td>
 </tr>
-<tr class="odd">
-<td>&quot;San Diego, CA: San Diego Inter…</td>
-<td>2014</td>
-<td>12</td>
-</tr>
-<tr class="even">
-<td>&quot;Salt Lake City, UT: Salt Lake …</td>
-<td>2009</td>
-<td>12</td>
-</tr>
-<tr class="odd">
-<td>&quot;&quot;</td>
-<td>2013</td>
-<td>3</td>
-</tr>
-<tr class="even">
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-<tr class="odd">
-<td>&quot;Washington, DC: Washington Dul…</td>
-<td>2006</td>
-<td>12</td>
-</tr>
 <tr class="even">
 <td>&quot;Chicago, IL: Chicago O&#39;Hare In…</td>
-<td>2012</td>
-<td>12</td>
+<td>2009</td>
+<td>11</td>
 </tr>
 <tr class="odd">
-<td>&quot;Atlanta, GA: Hartsfield-Jackso…</td>
-<td>2008</td>
-<td>8</td>
+<td>&quot;San Diego, CA: San Diego Inter…</td>
+<td>2007</td>
+<td>11</td>
 </tr>
 <tr class="even">
 <td>&quot;Atlanta, GA: Hartsfield-Jackso…</td>
-<td>2005</td>
+<td>2009</td>
 <td>10</td>
 </tr>
 <tr class="odd">
-<td>&quot;Atlanta, GA: Hartsfield-Jackso…</td>
-<td>2015</td>
+<td>&quot;San Diego, CA: San Diego Inter…</td>
+<td>2009</td>
 <td>11</td>
 </tr>
 </tbody>
@@ -2382,7 +2382,7 @@ white-space: pre-wrap;
 <h2 class="anchored" data-anchor-id="question-2">QUESTION 2</h2>
 <p><strong>Which airport has the worst delays?</strong> Describe the metric you chose, and why you chose it to determine the “worst” airport. Your answer should include a summary table that lists (for each airport) the total number of flights, total number of delayed flights, proportion of delayed flights, and average delay time in hours.</p>
 <p>I chose to sort the airports by the percentage of flights that are delayed. Turns out that the worst airport by this deffinition is San Francisco in CA. 26.1% of flights are delayed. Thats about 1 in 4 flights which is crazy. Although I will note that the average delay time is less at the San Francisco airport than the other airports.</p>
-<div id="5e5b40b7" class="cell" data-execution_count="4">
+<div id="2e650067" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;</span></span>
@@ -2497,14 +2497,14 @@ white-space: pre-wrap;
 <h2 class="anchored" data-anchor-id="question-3">QUESTION 3</h2>
 <p><strong>Create a barplot showing the proportion of all flights that are delayed at each airport. Describe what you learn from this graph.</strong></p>
 <p>It turns out that SLC has the has the lowest proportion of delayed flights coming in at 14.6% which is 11.5% better then the worst airport.</p>
-<div id="9035b289" class="cell" data-execution_count="5">
+<div id="eda3b543" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  ggplot(data<span class="op">=</span>Q2, mapping<span class="op">=</span>aes(x<span class="op">=</span><span class="st">&quot;airport_code&quot;</span>, y<span class="op">=</span><span class="st">&quot;proportion_delayed&quot;</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  ggplot(data<span class="op">=</span>Q2, mapping<span class="op">=</span>aes(x<span class="op">=</span><span class="st">&quot;airport_code&quot;</span>, y<span class="op">=</span><span class="st">&quot;proportion_delayed&quot;</span>, fill<span class="op">=</span><span class="st">&quot;airport_code&quot;</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> geom_bar(stat<span class="op">=</span><span class="st">&quot;identity&quot;</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> coord_flip()</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> labs(x<span class="op">=</span><span class="st">&quot;Airport&quot;</span>, y<span class="op">=</span><span class="st">&quot;Proportion of delayed flights&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">+</span> labs(x<span class="op">=</span><span class="st">&quot;Airport&quot;</span>, y<span class="op">=</span><span class="st">&quot;Proportion of delayed flights&quot;</span>, fill<span class="op">=</span><span class="st">&quot;Airport Code&quot;</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -2517,7 +2517,7 @@ white-space: pre-wrap;
 //# sourceMappingURL=lets-plot.js.map</script>
    
    
-          <div id="GArvuS"></div>
+          <div id="ZQJXNM"></div>
    <script type="text/javascript" data-lets-plot-script="plot">
    
    (function() {
@@ -2542,7 +2542,7 @@ white-space: pre-wrap;
        };
    }
    
-   const containerDiv = document.getElementById("GArvuS");
+   const containerDiv = document.getElementById("ZQJXNM");
    let fig = null;
    
    function renderPlot() {
@@ -2554,7 +2554,8 @@ white-space: pre-wrap;
 },
 "mapping":{
 "x":"airport_code",
-"y":"proportion_delayed"
+"y":"proportion_delayed",
+"fill":"airport_code"
 },
 "data_meta":{
 "series_annotations":[{
@@ -2584,6 +2585,9 @@ white-space: pre-wrap;
 },
 "y":{
 "title":"Proportion of delayed flights"
+},
+"fill":{
+"title":"Airport Code"
 }
 },
 "kind":"plot",
